@@ -1,0 +1,15 @@
+{
+	"name": "ml-express/svg",
+	"type": "library",
+	"description": "SVG Express is a library for creating SVG documents.",
+	"keywords": ["svg", "builder", "writer"],
+	"license": "MIT",
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=5.4.0",
+		"ml-express/xml": "dev-master@dev"
+	},
+	"autoload": {
+		"files": ["src/Svg.php"]
+	}
+}
