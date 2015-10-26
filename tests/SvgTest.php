@@ -83,6 +83,21 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->polyline('')->addPoint(4, 4),
 						'<polyline points="4,4"/>'
 				),
+				// path()
+				array(
+						Svg::createSub()->path('M 20,20 V 40 H 40 V 20 C'),
+						'<path d="M 20,20 V 40 H 40 V 20 C"/>'
+				),
+				// moveTo(), lineTo(), vertLineTo(), horizLineTo(), closePath()
+				array(
+						Svg::createSub()->path()
+								->moveTo(20, 20)
+								->vertLineTo(40)
+								->horizLineTo(40)
+								->vertLineTo(20)
+								->closePath(),
+						'<path d="M 20,20 V 40 H 40 V 20 C"/>'
+				)
 		);
 	}
 }

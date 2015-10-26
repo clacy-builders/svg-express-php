@@ -148,6 +148,12 @@ class Svg extends Xml
 				->setPoints($points);
 	}
 
+	public function path($d = null)
+	{
+		return $this->append('path')
+				->attrib('d', $d);
+	}
+
 	/**
 	 * The points attribute.
 	 *
@@ -179,4 +185,58 @@ class Svg extends Xml
 	{
 		return $this->attrib('points', $x . ',' . $y, ' ', true);
 	}
+
+	private function addPathCommand($command, $coords = null, $relative = false)
+	{
+		$this
+				->attrib('d', $relative ? strtolower($command) : $command, ' ', false, false)
+				->attrib('d', $coords, ' ', false, false);
+		return $this;
+	}
+
+	public function closePath()
+	{
+		return $this->addPathCommand('C');
+	}
+
+	public function moveTo($x, $y, $relative = false)
+	{
+		return $this->addPathCommand('M', "$x,$y", $relative);
+	}
+
+	public function lineTo($x, $y, $relative = false)
+	{
+		return $this->addPathCommand('L', "$x,$y", $relative);
+	}
+
+	public function horizLineTo($x, $relative = false)
+	{
+		return $this->addPathCommand('H', $x, $relative);
+	}
+
+	public function vertLineTo($y, $relative = false)
+	{
+		return $this->addPathCommand('V', $y, $relative);
+	}
+
+	public function curveTo($x1, $y1, $x2, $y2, $x, $y, $relative = false)
+	{
+		return $this->addPathCommand('C', "$x1,$y1, $x2,$y2 $x,$y", $relative);
+	}
+
+	public function smoothCurveTo($x2, $y2, $x, $y, $relative = false)
+	{
+		return $this->addPathCommand('C', "$x2,$y2 $x,$y", $relative);
+	}
+
+	public function quadraticCurveTo($x1, $y1, $x, $y, $relative = false)
+	{
+		return $this->addPathCommand('Q', "$x1,$y1, $x,$y", $relative);
+	}
+
+	public function smoothQuadraticCurveTo($x, $y, $relative = false)
+	{
+		return $this->addPathCommand('T', "$x,$y", $relative);
+	}
+
 }
