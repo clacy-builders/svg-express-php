@@ -85,8 +85,8 @@ class SvgTest extends Express_TestCase
 				),
 				// path()
 				array(
-						Svg::createSub()->path('M 20,20 V 40 H 40 V 20 C'),
-						'<path d="M 20,20 V 40 H 40 V 20 C"/>'
+						Svg::createSub()->path('M 20,20 V 40 H 40 V 20 Z'),
+						'<path d="M 20,20 V 40 H 40 V 20 Z"/>'
 				),
 				// moveTo(), lineTo(), vertLineTo(), horizLineTo(), closePath()
 				array(
@@ -96,8 +96,35 @@ class SvgTest extends Express_TestCase
 								->horizLineTo(40)
 								->vertLineTo(20)
 								->closePath(),
-						'<path d="M 20,20 V 40 H 40 V 20 C"/>'
-				)
+						'<path d="M 20,20 V 40 H 40 V 20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()
+								->moveTo(20, 20)
+								->vertLineTo(20, true)
+								->horizLineTo(20, true)
+								->vertLineTo(-20, true)
+								->closePath(),
+						'<path d="M 20,20 v 20 h 20 v -20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()
+								->moveTo(20, 20, true)
+								->lineTo(20, 40)
+								->lineTo(20, 0, true)
+								->lineTo(0, -20, true)
+								->lineTo(-20, 0, true)
+								->closePath(),
+						'<path d="m 20,20 L 20,40 l 20,0 l 0,-20 l -20,0 Z"/>'
+				),
+				// curveTo()
+				array(
+						Svg::createSub()->path()
+								->moveTo(20, 40)
+								->curveTo(60, 0, 80, 80, 120, 40)
+								->curveTo(40, 40, -40, 60, 0, 100, true),
+						'<path d="M 20,40 C 60,0 80,80 120,40 c 40,40 -40,60 0,100"/>'
+				),
 		);
 	}
 }

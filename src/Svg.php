@@ -196,7 +196,7 @@ class Svg extends Xml
 
 	public function closePath()
 	{
-		return $this->addPathCommand('C');
+		return $this->addPathCommand('Z');
 	}
 
 	public function moveTo($x, $y, $relative = false)
@@ -221,17 +221,17 @@ class Svg extends Xml
 
 	public function curveTo($x1, $y1, $x2, $y2, $x, $y, $relative = false)
 	{
-		return $this->addPathCommand('C', "$x1,$y1, $x2,$y2 $x,$y", $relative);
+		return $this->addPathCommand('C', "$x1,$y1 $x2,$y2 $x,$y", $relative);
 	}
 
 	public function smoothCurveTo($x2, $y2, $x, $y, $relative = false)
 	{
-		return $this->addPathCommand('C', "$x2,$y2 $x,$y", $relative);
+		return $this->addPathCommand('S', "$x2,$y2 $x,$y", $relative);
 	}
 
 	public function quadraticCurveTo($x1, $y1, $x, $y, $relative = false)
 	{
-		return $this->addPathCommand('Q', "$x1,$y1, $x,$y", $relative);
+		return $this->addPathCommand('Q', "$x1,$y1 $x,$y", $relative);
 	}
 
 	public function smoothQuadraticCurveTo($x, $y, $relative = false)
