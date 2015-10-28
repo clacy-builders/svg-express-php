@@ -88,22 +88,22 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->path('M 20,20 V 40 H 40 V 20 Z'),
 						'<path d="M 20,20 V 40 H 40 V 20 Z"/>'
 				),
-				// moveTo(), lineTo(), vertLineTo(), horizLineTo(), closePath()
+				// moveTo(), lineTo(), vLineTo(), hLineTo(), closePath()
 				array(
 						Svg::createSub()->path()
 								->moveTo(20, 20)
-								->vertLineTo(40)
-								->horizLineTo(40)
-								->vertLineTo(20)
+								->vLineTo(40)
+								->hLineTo(40)
+								->vLineTo(20)
 								->closePath(),
 						'<path d="M 20,20 V 40 H 40 V 20 Z"/>'
 				),
 				array(
 						Svg::createSub()->path()
 								->moveTo(20, 20)
-								->vertLineTo(20, true)
-								->horizLineTo(20, true)
-								->vertLineTo(-20, true)
+								->vLineTo(20, true)
+								->hLineTo(20, true)
+								->vLineTo(-20, true)
 								->closePath(),
 						'<path d="M 20,20 v 20 h 20 v -20 Z"/>'
 				),
@@ -124,6 +124,49 @@ class SvgTest extends Express_TestCase
 								->curveTo(60, 0, 80, 80, 120, 40)
 								->curveTo(40, 40, -40, 60, 0, 100, true),
 						'<path d="M 20,40 C 60,0 80,80 120,40 c 40,40 -40,60 0,100"/>'
+				),
+				// sCurveTo()
+				array(
+						Svg::createSub()->path()
+								->moveTo(100, 100)
+								->curveTo(140, 60, 160, 60, 200, 100)
+								->sCurveTo(240, 160, 200, 200)
+								->sCurveTo(-60, 40, -100, 0, true)
+								->sCurveTo(-40, -60, 0, -100, true),
+						'<path d="M 100,100 C 140,60 160,60 200,100 S 240,160 200,200 '
+						. 's -60,40 -100,0 s -40,-60 0,-100"/>'
+				),
+				// qCurveTo()
+				array(
+						Svg::createSub()->path()
+								->moveTo(100, 100)
+								->qCurveTo(150, 50, 200, 100)
+								->qCurveTo(250, 150, 200, 200)
+								->qCurveTo(-50, 50, -100, 0, true)
+								->qCurveTo(-50, -50, 0, -100, true),
+						'<path d="M 100,100 Q 150,50 200,100 Q 250,150 200,200 '
+						. 'q -50,50 -100,0 q -50,-50 0,-100"/>'
+				),
+				// sqCurveTo()
+				array(
+						Svg::createSub()->path()
+								->moveTo(100, 100)
+								->qCurveTo(150, 50, 200, 100)
+								->sqCurveTo(200, 200)
+								->sqCurveTo(-100, 0, true)
+								->sqCurveTo(0, -100, true),
+						'<path d="M 100,100 Q 150,50 200,100 T 200,200 t -100,0 t 0,-100"/>'
+				),
+				// arc()
+				array(
+						Svg::createSub()->path()
+								->moveTo(400, 300)
+								->arc(80, 60, 45, 1, 1, 500, 300)
+								->arc(80, 60, 45, 0, 0, -100, 0, true)
+								->arc(80, 60, 45, 1, 0, 500, 300)
+								->arc(80, 60, 45, 0, 1, -100, 0, true),
+						'<path d="M 400,300 A 80 60 45 1 1 500 300 a 80 60 45 0 0 -100 0 '
+						. 'A 80 60 45 1 0 500 300 a 80 60 45 0 1 -100 0"/>'
 				),
 		);
 	}
