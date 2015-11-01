@@ -183,11 +183,11 @@ class Svg extends Xml
 			}
 			return $this;
 		}
-		return $this->attrib('points', $points, ' ');
+		return $this->complexAttrib('points', $points);
 	}
 
 	/**
-	 * Adds a point to the points listened in the <code>points</code> attribute.
+	 * Adds a point to the points listened in the points attribute.
 	 *
 	 * @param x
 	 * <p>The x coordinate.</p>
@@ -197,14 +197,14 @@ class Svg extends Xml
 	 */
 	public function addPoint($x, $y)
 	{
-		return $this->attrib('points', $x . ',' . $y, ' ', true);
+		return $this->complexAttrib('points', $x . ',' . $y);
 	}
 
 	private function addPathCommand($command, $coords = null, $relative = false)
 	{
 		$this
-				->attrib('d', $relative ? strtolower($command) : $command, ' ', false, false)
-				->attrib('d', $coords, ' ', false, false);
+				->complexAttrib('d', $relative ? strtolower($command) : $command)
+				->complexAttrib('d', $coords);
 		return $this;
 	}
 
