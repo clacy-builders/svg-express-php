@@ -168,6 +168,30 @@ class Svg extends Xml
 				->attrib('d', $d);
 	}
 
+
+	/**
+	 * The text element.
+	 *
+	 * @param content string [optional]
+	 * <p>You may append <code>tspan</code>, <code>tref</code> or <code>tpath</code> instead.</p>
+	 *
+	 * @param x mixed [optional]
+	 * <p>One or more x values (comma separated or in an array).</p>
+	 *
+	 * @param y mixed [optional]
+	 * <p>One or more y values (comma separated or in an array).</p>
+	 *
+	 * @param dx mixed [optional]
+	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 *
+	 * @param dy mixed [optional]
+	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 */
+	public function text($content = '', $x = null, $y = null, $dx = null, $dy = null)
+	{
+		return $this->append('text', $content)->setX($x)->setY($y)->setDx($dx)->setDy($dy);
+	}
+
 	/**
 	 * The points attribute.
 	 *
@@ -411,5 +435,50 @@ class Svg extends Xml
 		$sweep = $sweep ? '1' : '0';
 		return $this->addPathCommand('A', "$rx $ry $xAxisRotation $largeArc $sweep $x $y",
 				$relative);
+	}
+
+	/**
+	 * The dx attribute.
+	 *
+	 * @param dx mixed
+	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 */
+	public function setDx($dx)
+	{
+		return $this->complexAttrib('dx', $dx, ',');
+	}
+
+	/**
+	 * The dy attribute.
+	 *
+	 * @param dy mixed
+	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 */
+	public function setDy($dy)
+	{
+		return $this->complexAttrib('dy', $dy, ',');
+	}
+
+	/**
+	 * The x attribute.
+	 *
+	 * @param x mixed
+	 * <p>One or more x values (comma separated or in an array).</p>
+	 */
+	public function setX($x)
+	{
+		return $this->complexAttrib('x', $x, ',');
+	}
+
+	/**
+	 * The y attribute.
+	 *
+	 * @param y mixed
+	 * <p>One or more y values (comma separated or in an array).</p>
+	 */
+
+	public function setY($y)
+	{
+		return $this->complexAttrib('y', $y, ',');
 	}
 }
