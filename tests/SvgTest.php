@@ -1,14 +1,15 @@
 <?php
 
-namespace ML_Express\HTML5;
+namespace ML_Express\SVG\Tests;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once 'vendor/ml-express/xml/src/Xml.php';
+require_once 'vendor/ml-express/xml/src/XmlAttributes.php';
+require_once 'vendor/ml-express/xml/src/shared/XLink.php';
+require_once 'vendor/ml-express/xml/src/shared/XLinkConstants.php';
+require_once 'vendor/ml-express/xml/tests/Express_TestCase.php';
+require_once 'src/Svg.php';
 
-require_once __DIR__ . '/../vendor/ml-express/xml/src/Xml.php';
-require_once __DIR__ . '/../vendor/ml-express/xml/tests/Express_TestCase.php';
-require_once __DIR__ . '/../src/Svg.php';
-
-use ML_Express\Express_TestCase;
+use ML_Express\Tests\Express_TestCase;
 use ML_Express\SVG\Svg;
 
 class SvgTest extends Express_TestCase
@@ -168,19 +169,34 @@ class SvgTest extends Express_TestCase
 						'<path d="M 400,300 A 80 60 45 1 1 500 300 a 80 60 45 0 0 -100 0 '
 						. 'A 80 60 45 1 0 500 300 a 80 60 45 0 1 -100 0"/>'
 				),
-
-				// text(), setX(), setY(), setDx(), setDy()
+				// text(), setX(), setY(), setDx(), setDy(), setXY(), setDxDy(), setRotate()
 				array(
 						Svg::createSub()->text('lorem ipsum', 20, 100),
 						'<text x="20" y="100">lorem ipsum</text>'
 				),
 				array(
 						Svg::createSub()->text('lorem ipsum', [20, 30, 40], [100, 105]),
-						'<text x="20,30,40" y="100,105">lorem ipsum</text>'
+						'<text x="20 30 40" y="100 105">lorem ipsum</text>'
 				),
 				array(
 						Svg::createSub()->text('lorem ipsum', 10, 10, [2, 3, 4], [1, 2]),
-						'<text x="10" y="10" dx="2,3,4" dy="1,2">lorem ipsum</text>'
+						'<text x="10" y="10" dx="2 3 4" dy="1 2">lorem ipsum</text>'
+				),
+				array(
+						Svg::createSub()->text('lorem ipsum', 10, 10, null, null, [15, 30, 45]),
+						'<text x="10" y="10" rotate="15 30 45">lorem ipsum</text>'
+				),
+				// tspan()
+				array(
+						Svg::createSub()->tspan('lorem ipsum', 10, 40,
+								[2, 3, 4], [1, 2], [15, 30, 45]),
+						'<tspan x="10" y="40" dx="2 3 4" dy="1 2" rotate="15 30 45">' .
+								'lorem ipsum</tspan>'
+				),
+				// textPath()
+				array(
+						Svg::createSub()->textPath('lorem ipsum', '#path'),
+						'<textPath xlink:href="#path">lorem ipsum</textPath>'
 				),
 		);
 	}

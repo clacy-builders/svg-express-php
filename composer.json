@@ -7,9 +7,11 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.4.0",
-		"ml-express/xml": ">=0.4"
+		"ml-express/xml": ">=0.6"
 	},
 	"autoload": {
-		"files": ["src/Svg.php"]
+		"psr-4": {
+			"ML_Express\\SVG\\": "src/"
+		}
 	}
 }

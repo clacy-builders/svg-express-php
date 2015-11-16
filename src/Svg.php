@@ -1,10 +1,17 @@
 <?php
+
 namespace ML_Express\SVG;
 
 use ML_Express\Xml;
+use ML_Express\Shared\XLink;
+use ML_Express\Shared\XLinkConstants;
+use ML_Express\Shared\ClassAttribute;
+use ML_Express\Shared\StyleAttribute;
 
-class Svg extends Xml
+class Svg extends Xml implements XLinkConstants
 {
+	use XLink, ClassAttribute, StyleAttribute;
+
 	const MIME_TYPE = 'image/svg+xml';
 	const FILENAME_EXTENSION = 'svg';
 	const ROOT_ELEMENT = 'svg';
@@ -168,12 +175,11 @@ class Svg extends Xml
 				->attrib('d', $d);
 	}
 
-
 	/**
 	 * The text element.
 	 *
 	 * @param content string [optional]
-	 * <p>You may append <code>tspan</code>, <code>tref</code> or <code>tpath</code> instead.</p>
+	 * <p>You may append <code>tspan</code> or <code>tpath</code> instead.</p>
 	 *
 	 * @param x mixed [optional]
 	 * <p>One or more x values (comma separated or in an array).</p>
@@ -186,10 +192,61 @@ class Svg extends Xml
 	 *
 	 * @param dy mixed [optional]
 	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 *
+	 * @param rotate string|array [optional]
+	 * <p>makes each character rotate to its respective value, with remaining characters rotating
+	 * according to the last value. A space separated list or an array.</p>
 	 */
-	public function text($content = '', $x = null, $y = null, $dx = null, $dy = null)
+	public function text($content = '', $x = null, $y = null, $dx = null, $dy = null,
+			$rotate = null)
 	{
-		return $this->append('text', $content)->setX($x)->setY($y)->setDx($dx)->setDy($dy);
+		return $this->append('text', $content)
+				->setXY($x, $y)
+				->setDxDy($dx, $dy)
+				->setRotate($rotate);
+	}
+
+	/**
+	 * The tspan element.
+	 *
+	 * @param content string
+	 *
+	 * @param x mixed [optional]
+	 * <p>One or more x values (comma separated or in an array).</p>
+	 *
+	 * @param y mixed [optional]
+	 * <p>One or more y values (comma separated or in an array).</p>
+	 *
+	 * @param dx mixed [optional]
+	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 *
+	 * @param dy mixed [optional]
+	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 *
+	 * @param rotate string|array [optional]
+	 * <p>makes each character rotate to its respective value, with remaining characters rotating
+	 * according to the last value. A space separated list or an array.</p>
+	 */
+	public function tspan($content, $x = null, $y = null, $dx = null, $dy = null, $rotate = null)
+	{
+		return $this->append('tspan', $content)
+				->setXY($x, $y)
+				->setDxDy($dx, $dy)
+				->setRotate($rotate);
+	}
+
+	/**
+	 * The textPath element.
+	 *
+	 * @param content string
+	 *
+	 * @param href string
+	 * <p>Fetches an arbitrary path and aligns the characters, that it encircles,
+	 * along this path.</p>
+	 */
+	public function textPath($content, $href)
+	{
+		return $this->append('textPath', $content)->setXLinkHref($href);
 	}
 
 	/**
@@ -445,7 +502,7 @@ class Svg extends Xml
 	 */
 	public function setDx($dx)
 	{
-		return $this->complexAttrib('dx', $dx, ',');
+		return $this->complexAttrib('dx', $dx);
 	}
 
 	/**
@@ -456,7 +513,21 @@ class Svg extends Xml
 	 */
 	public function setDy($dy)
 	{
-		return $this->complexAttrib('dy', $dy, ',');
+		return $this->complexAttrib('dy', $dy);
+	}
+
+	/**
+	 * Sets dx and dy.
+	 *
+	 * @param dy mixed
+	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 *
+	 * @param dx mixed
+	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 */
+	public function setDxDy($dx, $dy)
+	{
+		return $this->setDx($dx)->setDy($dy);
 	}
 
 	/**
@@ -467,7 +538,7 @@ class Svg extends Xml
 	 */
 	public function setX($x)
 	{
-		return $this->complexAttrib('x', $x, ',');
+		return $this->complexAttrib('x', $x);
 	}
 
 	/**
@@ -476,9 +547,34 @@ class Svg extends Xml
 	 * @param y mixed
 	 * <p>One or more y values (comma separated or in an array).</p>
 	 */
-
 	public function setY($y)
 	{
-		return $this->complexAttrib('y', $y, ',');
+		return $this->complexAttrib('y', $y);
+	}
+
+	/**
+	 * Sets x and y.
+	 *
+	 * @param x mixed
+	 * <p>One or more x values (comma separated or in an array).</p>
+	 *
+	 * @param y mixed
+	 * <p>One or more y values (comma separated or in an array).</p>
+	 */
+	public function setXY($x, $y)
+	{
+		return $this->setX($x)->setY($y);
+	}
+
+	/**
+	 * The rotate attribute.
+	 *
+	 * @param rotate string|array
+	 * <p>makes each character rotate to its respective value, with remaining characters rotating
+	 * according to the last value. A space separated list or an array.</p>
+	 */
+	public function setRotate($rotate)
+	{
+		return $this->complexAttrib('rotate', $rotate);
 	}
 }
