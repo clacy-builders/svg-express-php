@@ -4,6 +4,8 @@ namespace ML_Express\SVG\Tests;
 
 require_once 'vendor/ml-express/xml/src/Xml.php';
 require_once 'vendor/ml-express/xml/src/XmlAttributes.php';
+require_once 'vendor/ml-express/xml/src/shared/ClassAttribute.php';
+require_once 'vendor/ml-express/xml/src/shared/StyleAttribute.php';
 require_once 'vendor/ml-express/xml/src/shared/XLink.php';
 require_once 'vendor/ml-express/xml/src/shared/XLinkConstants.php';
 require_once 'vendor/ml-express/xml/tests/Express_TestCase.php';
@@ -198,6 +200,26 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->textPath('lorem ipsum', '#path'),
 						'<textPath xlink:href="#path">lorem ipsum</textPath>'
 				),
+				// useElem()
+				array(
+						Svg::createSub()->useElem('#circle', 20, 30, 40, 50),
+						'<use xlink:href="#circle" x="20" y="30" width="40" height="50"/>'
+				),
+				// defs()
+				array(
+						Svg::createSub()->defs()->circle(0, 0, 20)->attrib('id', 'circle'),
+						"<defs>\n\t<circle cx=\"0\" cy=\"0\" r=\"20\" id=\"circle\"/>\n</defs>"
+				),
+				// g()
+				array(
+						Svg::createSub()->g()->circle(0, 0, 20),
+						"<g>\n\t<circle cx=\"0\" cy=\"0\" r=\"20\"/>\n</g>"
+				),
+				// title(), desc()
+				array(
+						Svg::createSub()->title('Foo Bar')->getRoot()->desc('lorem ipsum'),
+						"<title>Foo Bar</title>\n<desc>lorem ipsum</desc>"
+				)
 		);
 	}
 }

@@ -134,7 +134,7 @@ class Svg extends Xml implements XLinkConstants
 	 * <p>Otherwise an array (points) of arrays (x and y coordinates).<br>
 	 * <code>[[1, 2], [3, 4]]</code></p>
 	 */
-	public function polyline($points)
+	public function polyline($points = null)
 	{
 		return $this->append('polyline')
 				->setPoints($points);
@@ -146,7 +146,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param points string|array
 	 * <p>See the description of <code>polyline()</code></p>
 	 */
-	public function polygon($points)
+	public function polygon($points = null)
 	{
 		return $this->append('polygon')
 				->setPoints($points);
@@ -247,6 +247,71 @@ class Svg extends Xml implements XLinkConstants
 	public function textPath($content, $href)
 	{
 		return $this->append('textPath', $content)->setXLinkHref($href);
+	}
+
+	/**
+	 * The <code>defs</code> element.
+	 */
+	public function defs()
+	{
+		return $this->append('defs');
+	}
+
+	/**
+	 * The <code>use</code> element.
+	 *
+	 * @param href string
+	 * <p>A reference to an element/fragment within an SVG document.</p>
+	 *
+	 * @param x int|float [optional]
+	 * <p>The x-axis coordinate of the upper-left corner of the region into which the
+	 * referenced element is placed.</p>
+	 *
+	 * @param y int|float [optional]
+	 * <p>The y-axis coordinate of the upper-left corner of the region into which the
+	 * referenced element is placed.</p>
+	 *
+	 * @param width int|float [optional]
+	 * <p>The width of the region into which the referenced element is placed.</p>
+	 *
+	 * @param height int|float [optional]
+	 * <p>The height of the region into which the referenced element is placed.</p>
+	 */
+	public function useElem($href, $x = null, $y = null, $width = null, $height = null)
+	{
+		return $this->append('use')
+				->setXLinkHref($href)
+				->setXY($x, $y)
+				->attrib('width', $width)
+				->attrib('height', $height);
+	}
+
+	/**
+	 * The g element.
+	 */
+	public function g()
+	{
+		return $this->append('g');
+	}
+
+	/**
+	 * the <code>title</code> element.
+	 *
+	 * @param content string
+	 */
+	public function title($content)
+	{
+		return $this->append('title', $content);
+	}
+
+	/**
+	 * the <code>desc</code> element.
+	 *
+	 * @param content string
+	 */
+	public function desc($content)
+	{
+		return $this->append('desc', $content);
 	}
 
 	/**
