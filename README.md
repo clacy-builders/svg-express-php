@@ -23,7 +23,13 @@ Run `composer install` or `composer update`.
 ## Basic usage
 
 ```php
- '2015-01', 'clicks' => '501'],
+<?php
+require_once 'vendor/autoload.php';
+
+use ML_Express\SVG\Svg;
+
+$dbRows = array(
+        ['month' => '2015-01', 'clicks' => '501'],
         ['month' => '2015-02', 'clicks' => '560'],
         ['month' => '2015-03', 'clicks' => '543'],
         ['month' => '2015-04', 'clicks' => '607'],
