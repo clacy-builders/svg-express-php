@@ -39,7 +39,8 @@ $dbRows = array(
 
 $svg = Svg::createSvg(400, 400);
 $svg->append('style')->appendText(".bgr {
-            fill: #cde;
+            fill: #593;
+            fill-opacity: 0.25;
         }
         .graph {
             fill: none;
@@ -50,14 +51,21 @@ $svg->append('style')->appendText(".bgr {
             fill: #593;
             fill-opacity: 0.5;
         }
-        .labels {
-            font-size: 16px;
-            font-family: tahoma, verdana, sans-serif;
+        .labels, .title {
+            font-family: open sans, tahoma, verdana, sans-serif;
             fill: 333;
             stroke: none;
+        }
+        .labels {
+            font-size: 16px;
+        }
+        .title {
+            font-size: 24px;
+            text-anchor: middle;
         }");
 $group = $svg->g();
 $group->rect(0, 0, 400, 400)->setClass('bgr');
+$group->text('Clicks 1/2015', 200, 45)->setClass('title');
 $solid = $group->polygon()->setClass('solid');
 $solid->setPoints([[350, 330], [50, 330]]);
 $graph = $group->polyline()->setClass('graph');
@@ -73,15 +81,15 @@ foreach ($dbRows as $i => $row) {
             strftime('%b', (new DateTime($row['month']))->getTimestamp()),
             $x - 10, 350);
 }
-
 print $svg->getMarkup();
 ```
-```html
+```svg
 <?xml version="1.0" encoding="UTF-8" ?>
 <svg width="400" height="400">
     <style>
         .bgr {
-            fill: #cde;
+            fill: #593;
+            fill-opacity: 0.25;
         }
         .graph {
             fill: none;
@@ -92,15 +100,22 @@ print $svg->getMarkup();
             fill: #593;
             fill-opacity: 0.5;
         }
-        .labels {
-            font-size: 16px;
-            font-family: tahoma, verdana, sans-serif;
+        .labels, .title {
+            font-family: open sans, tahoma, verdana, sans-serif;
             fill: 333;
             stroke: none;
+        }
+        .labels {
+            font-size: 16px;
+        }
+        .title {
+            font-size: 24px;
+            text-anchor: middle;
         }
     </style>
     <g>
         <rect x="0" y="0" width="400" height="400" class="bgr"/>
+        <text x="200" y="45" class="title">Clicks 1/2015</text>
         <polygon points="350,330 50,330 50,249.5 110,220 170,228.5 230,196.5 290,177 350,177.5" class="solid"/>
         <polyline points="50,249.5 110,220 170,228.5 230,196.5 290,177 350,177.5" class="graph"/>
         <text class="labels">
