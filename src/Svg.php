@@ -7,6 +7,9 @@ use ML_Express\Shared\XLink;
 use ML_Express\Shared\XLinkConstants;
 use ML_Express\Shared\ClassAttribute;
 use ML_Express\Shared\StyleAttribute;
+use ML_Express\Graphics\Point;
+use ML_Express\Graphics\Points;
+use ML_Express\Graphics\Angle;
 
 class Svg extends Xml implements XLinkConstants
 {
@@ -28,29 +31,18 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The rect (rectangle) element.
 	 *
-	 * @param x
-	 * <p>The x position of the top left corner of the rectangle.</p>
-	 *
-	 * @param y
-	 * <p>The y position of the top left corner of the rectangle.</p>
-	 *
-	 * @param width
-	 * <p>The width of the rectangle</p>
-	 *
-	 * @param height
-	 * <p>The height of the rectangle.</p>
-	 *
-	 * @param rx
-	 * <p>The x radius of the corners of the rectangle</p>
-	 *
-	 * @param ry
-	 * <p>The y radius of the corners of the rectangle</p>
+	 * @param  Point|array  $corner  The top left corner of the rectangle.
+	 * @param  float        $width   The width of the rectangle.
+	 * @param  float        $height  The height of the rectangle.
+	 * @param  float        $rx      The x radius of the corners of the rectangle.
+	 * @param  float        $ry      The y radius of the corners of the rectangle.
 	 */
-	public function rect($x, $y, $width, $height, $rx = null, $ry = null)
+	public function rect($corner, $width, $height, $rx = null, $ry = null)
 	{
+		$corner = self::point($corner);
 		return $this->append('rect')
-				->attrib('x', $x)
-				->attrib('y', $y)
+				->attrib('x', $corner->x)
+				->attrib('y', $corner->y)
 				->attrib('width', $width)
 				->attrib('height', $height)
 				->attrib('rx', $rx)
@@ -60,43 +52,31 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The circle element.
 	 *
-	 * @param cx
-	 * <p>The x position of the center of the circle.</p>
-	 *
-	 * @param cy
-	 * <p>The y position of the center of the circle.</p>
-	 *
-	 * @param r
-	 * <p>The radius of the circle.</p>
+	 * @param  Point|array  $center  Center of the circle.
+	 * @param  float        $r       The radius of the circle.
 	 */
-	public function circle($cx, $cy, $r)
+	public function circle($center, $r)
 	{
+		$center = self::point($center);
 		return $this->append('circle')
-				->attrib('cx', $cx)
-				->attrib('cy', $cy)
+				->attrib('cx', $center->x)
+				->attrib('cy', $center->y)
 				->attrib('r', $r);
 	}
 
 	/**
 	 * The ellipse element.
 	 *
-	 * @param cx
-	 * <p>The x position of the center of the ellipse.</p>
-	 *
-	 * @param cy
-	 * <p>The y position of the center of the ellipse.</p>
-	 *
-	 * @param rx
-	 * <p>The x radius of the ellipse.</p>
-	 *
-	 * @param ry
-	 * <p>The y radius of the ellipse.</p>
+	 * @param  Point|array  $center  The center of the ellipse.
+	 * @param  float        $rx      The x radius of the ellipse.
+	 * @param  float        $ry      The y radius of the ellipse.	 *
 	 */
-	public function ellipse($cx, $cy, $rx, $ry)
+	public function ellipse($center, $rx, $ry)
 	{
+		$center = self::point($center);
 		return $this->append('ellipse')
-				->attrib('cx', $cx)
-				->attrib('cy', $cy)
+				->attrib('cx', $center->x)
+				->attrib('cy', $center->y)
 				->attrib('rx', $rx)
 				->attrib('ry', $ry);
 	}
@@ -104,35 +84,26 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The line element.
 	 *
-	 * @param x1
-	 * <p>The x position of point 1.</p>
-	 *
-	 * @param y1
-	 * <p>The y position of point 1.</p>
-	 *
-	 * @param x2
-	 * <p>The x position of point 2.</p>
-	 *
-	 * @param y2
-	 * <p>The y position of point 2.</p>
+	 * @param  Point|array  $point1
+	 * @param  Point|array  $point2
 	 */
-	public function line($x1, $y1, $x2, $y2)
+	public function line($point1, $point2)
 	{
+		$point1 = self::point($point1);
+		$point2 = self::point($point2);
 		return $this->append('line')
-				->attrib('x1', $x1)
-				->attrib('y1', $y2)
-				->attrib('x2', $x1)
-				->attrib('y2', $y2);
+				->attrib('x1', $point1->x)
+				->attrib('y1', $point1->y)
+				->attrib('x2', $point2->x)
+				->attrib('y2', $point2->y);
 	}
 
 	/**
 	 * The polyline element.
 	 *
-	 * @param points string|array
-	 * <p>A space separated list of points which x and y coordinates are comma separated.<br>
-	 * <code>'1,2 3,4'</code></p>
-	 * <p>Otherwise an array (points) of arrays (x and y coordinates).<br>
-	 * <code>[[1, 2], [3, 4]]</code></p>
+	 * @param  string|array  $points  A space separated list of points which x and y coordinates
+	 *                                are comma separated.
+	 *                                Otherwise an array of arrays or <code>Point</code> objects.
 	 */
 	public function polyline($points = null)
 	{
@@ -143,8 +114,9 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The polygon element.
 	 *
-	 * @param points string|array
-	 * <p>See the description of <code>polyline()</code></p>
+	 * @param  string|array  $points  A space separated list of points which x and y coordinates
+	 *                                are comma separated.
+	 *                                Otherwise an array of arrays or <code>Point</code> objects.
 	 */
 	public function polygon($points = null)
 	{
@@ -155,19 +127,17 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The path element.
 	 *
-	 * @param d string
-	 * <p>A series of commands. You may use the following methods to build this attribute:<br>
-	 * <ul><li><code>moveTo()</code>,
-	 * <li><code>lineTo()</code>,
-	 * <li><code>hLineTo()</code>,
-	 * <li><code>vLineTo()</code>,
-	 * <li><code>curveTo()</code>,
-	 * <li><code>sCurveTo()</code>
-	 * <li><code>qCurveTo()</code>
-	 * <li><code>sqCurveTo()</code>
-	 * <li><code>arc()</code>
-	 * <li><code>closePath()</code>
-	 * </ul></p>
+	 * @param  string  $d  A series of commands. You may use the following methods to build
+	 *                     this attribute:<ul><li><code>moveTo()</code>,
+	 *                     <li><code>lineTo()</code>,
+	 *                     <li><code>hLineTo()</code>,
+	 *                     <li><code>vLineTo()</code>,
+	 *                     <li><code>curveTo()</code>,
+	 *                     <li><code>sCurveTo()</code>
+	 *                     <li><code>qCurveTo()</code>
+	 *                     <li><code>sqCurveTo()</code>
+	 *                     <li><code>arc()</code>
+	 *                     <li><code>closePath()</code></ul>
 	 */
 	public function path($d = null)
 	{
@@ -295,7 +265,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * the <code>title</code> element.
+	 * The <code>title</code> element.
 	 *
 	 * @param content string
 	 */
@@ -305,7 +275,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * the <code>desc</code> element.
+	 * The <code>desc</code> element.
 	 *
 	 * @param content string
 	 */
@@ -317,15 +287,15 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The points attribute.
 	 *
-	 * @param points string|array
-	 * <p>See the description of <code>polyline()</code></p>
+	 * @param  string|array  $points  A space separated list of points which x and y coordinates
+	 *                                are comma separated.
+	 *                                Otherwise an array of arrays or <code>Point</code> objects.
 	 */
 	public function setPoints($points)
 	{
-		if (is_array($points)) {
+		if (!is_string($points)) {
 			foreach ($points as $point) {
-				list($x, $y) = array_values($point);
-				$this->addPoint($x, $y);
+				$this->addPoint($point);
 			}
 			return $this;
 		}
@@ -335,23 +305,19 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * Adds a point to the points listened in the points attribute.
 	 *
-	 * @param x
-	 * <p>The x coordinate.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate.</p>
+	 * @param  Point|array  $point
 	 */
-	public function addPoint($x, $y)
+	public function addPoint($point)
 	{
-		return $this->complexAttrib('points', $x . ',' . $y);
+		$point = self::point($point);
+		return $this->complexAttrib('points', $point->x . ',' . $point->y);
 	}
 
 	private function addPathCommand($command, $coords = null, $relative = false)
 	{
-		$this
+		return $this
 				->complexAttrib('d', $relative ? strtolower($command) : $command)
 				->complexAttrib('d', $coords);
-		return $this;
 	}
 
 	/**
@@ -365,49 +331,36 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The moveto command (<code>M</code> or <code>m</code>).
 	 *
-	 * @param x
-	 * <p>The x coordinate to move to.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to move to.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$x</code>, <code>$y</code> are relative or absolute.</p>
+	 * @param  Point|array  $point     The point to move to.
+	 * @param  booolean     $relative  Whether x, y of <code>$point</code> are relative
+	 *                                 or absolute.
 	 */
-	public function moveTo($x, $y, $relative = false)
+	public function moveTo($point, $relative = false)
 	{
-		return $this->addPathCommand('M', "$x,$y", $relative);
+		$point = self::point($point);
+		return $this->addPathCommand('M', "$point->x,$point->y", $relative);
 	}
 
 	/**
 	 * The lineto command (<code>L</code> or <code>l</code>).
 	 *
-	 * @param x
-	 * <p>The x coordinate to end the line at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the line at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$x</code>, <code>$y</code> are relative (to the last point)
-	 * or absolute.</p>
+	 * @param  Point|array  $point     The point to end the line at.
+	 * @param  boolean      $relative  Whether x, y of <code>$point</code> are relative
+	 *                                 (to the last point) or absolute.
 	 */
-	public function lineTo($x, $y, $relative = false)
+	public function lineTo($point, $relative = false)
 	{
-		return $this->addPathCommand('L', "$x,$y", $relative);
+		$point = self::point($point);
+		return $this->addPathCommand('L', "$point->x,$point->y", $relative);
 	}
 
 	/**
 	 * The horizontal lineto command (<code>H</code> or <code>h</code>).
 	 *
-	 * @param x
-	 * <p>The x coordinate to end the line at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$x</code> is relative (to the last point)
-	 * or absolute.</p>
+	 * @param  float    $x         The x coordinate to end the line at.
+	 * @param  boolean  $relative  Whether <code>$x</code> is relative (to the last point)
+	 *                             or absolute.
 	 */
-
 	public function hLineTo($x, $relative = false)
 	{
 		return $this->addPathCommand('H', $x, $relative);
@@ -416,12 +369,9 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The vertical lineto command (<code>V</code> or <code>v</code>).
 	 *
-	 * @param y
-	 * <p>The y coordinate to end the line at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$y</code> is relative (to the last point)
-	 * or absolute.</p>
+	 * @param  float    $y         The y coordinate to end the line at.
+	 * @param  boolean  $relative  Whether <code>$y</code> is relative (to the last point)
+	 *                             or absolute.
 	 */
 	public function vLineTo($y, $relative = false)
 	{
@@ -431,132 +381,147 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The cubic Bézier curveto command (<code>C</code> or <code>c</code>).
 	 *
-	 * @param x1
-	 * <p>The x coordinate of the control point for the start of the curve.</p>
-	 *
-	 * @param y1
-	 * <p>The y coordinate of the control point for the start of the curve.</p>
-	 *
-	 * @param x2
-	 * <p>The x coordinate of the control point for the end of the curve.</p>
-	 *
-	 * @param y2
-	 * <p>The y coordinate of the control point for the end of the curve.</p>
-	 *
-	 * @param x
-	 * <p>The x coordinate to end the stroke at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the stroke at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether the coordinates are relative (to the last point) or absolute.</p>
+	 * @param  Point|array  $control1  The control point for the start of the curve.
+	 * @param  Point|array  $control2  The control point for the end of the curve.
+	 * @param  Point|array  $point     The y coordinate to end the stroke at.
+	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
+	 *                                 or absolute.
 	 */
-	public function curveTo($x1, $y1, $x2, $y2, $x, $y, $relative = false)
+	public function curveTo($control1, $control2, $point, $relative = false)
 	{
-		return $this->addPathCommand('C', "$x1,$y1 $x2,$y2 $x,$y", $relative);
+		$control1 = self::point($control1);
+		$control2 = self::point($control2);
+		$point = self::point($point);
+		return $this->addPathCommand('C',
+				"$control1->x,$control1->y $control2->x,$control2->y $point->x,$point->y",
+				$relative);
 	}
 
 	/**
 	 * The smooth cubic Bézier curveto command (<code>S</code> or <code>s</code>).
 	 *
-	 * @param x2
-	 * <p>The x coordinate of the control point for the end of the curve.</p>
-	 *
-	 * @param y2
-	 * <p>The y coordinate of the control point for the end of the curve.</p>
-	 *
-	 * @param x
-	 * <p>The x coordinate to end the stroke at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the stroke at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether the coordinates are relative (to the last point) or absolute.</p>
+	 * @param  Point|array  $control2  The control point for the end of the curve.
+	 * @param  Point|array  $point     The point to end the stroke at.
+	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
+	 *                                 or absolute.
 	 */
-
-	public function sCurveTo($x2, $y2, $x, $y, $relative = false)
+	public function sCurveTo($control2, $point, $relative = false)
 	{
-		return $this->addPathCommand('S', "$x2,$y2 $x,$y", $relative);
+		$control2 = self::point($control2);
+		$point = self::point($point);
+		return $this->addPathCommand('S',
+				"$control2->x,$control2->y $point->x,$point->y", $relative);
 	}
 
 	/**
 	 * The quadratic Bézier curveto command (<code>Q</code> or <code>q</code>).
 	 *
-	 * @param x1
-	 * <p>The x coordinate of the control point.</p>
-	 *
-	 * @param y1
-	 * <p>The y coordinate of the control point.</p>
-	 *
-	 * @param x
-	 * <p>The x coordinate to end the stroke at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the stroke at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether the coordinates are relative (to the last point) or absolute.</p>
+	 * @param  Point|array  $control   The control point.
+	 * @param  Point|array  $point     The point to end the stroke at.
+	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
+	 *                                 or absolute.
 	 */
-
-	public function qCurveTo($x1, $y1, $x, $y, $relative = false)
+	public function qCurveTo($control, $point, $relative = false)
 	{
-		return $this->addPathCommand('Q', "$x1,$y1 $x,$y", $relative);
+		$control = self::point($control);
+		$point = self::point($point);
+		return $this->addPathCommand('Q',
+				"$control->x,$control->y $point->x,$point->y", $relative);
 	}
 
 	/**
 	 * The smooth quadratic Bézier curveto command (<code>T</code> or <code>t</code>).
 	 *
-	 * @param x
-	 * <p>The x coordinate to end the stroke at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the stroke at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$x</code>, <code>$y</code> are relative (to the last point)
-	 * or absolute.</p>
+	 * @param  Point|array  $point     The point to end the stroke at.
+	 * @param  boolean      $relative  Whether x, y of <code>$point</code> are relative
+	 *                                 (to the last point) or absolute.
 	 */
-	public function sqCurveTo($x, $y, $relative = false)
+	public function sqCurveTo($point, $relative = false)
 	{
-		return $this->addPathCommand('T', "$x,$y", $relative);
+		$point = self::point($point);
+		return $this->addPathCommand('T', "$point->x,$point->y", $relative);
 	}
 
 	/**
 	 * The elliptical arc command (<code>A</code> or <code>a</code>).
 	 *
-	 * @param rx
-	 * <p>The x radius of the ellipse.</p>
-	 *
-	 * @param ry
-	 * <p>The y radius of the ellipse.</p>
-	 *
-	 * @param xAxisRotation
-	 * <p>Rotation of the arc.</p>
-	 *
-	 * @param largeArc boolean
-	 * <p>Whether the arc should be greater than or less than 180 degrees.</p>
-	 *
-	 * @param sweep boolean
-	 * <p>Whether the arc should begin moving at negative angles or positive ones.</p>
-	 *
-	 * @param x
-	 * <p>The x coordinate to end the stroke at.</p>
-	 *
-	 * @param y
-	 * <p>The y coordinate to end the stroke at.</p>
-	 *
-	 * @param relative boolean [optional]
-	 * <p>Whether <code>$x</code>, <code>$y</code> are relative (to the last point)
-	 * or absolute.</p>
+	 * @param  float        $rx             The x radius of the ellipse.
+	 * @param  float        $ry             The y radius of the ellipse.
+	 * @param  float        $xAxisRotation  Rotation of the arc.
+	 * @param  boolean      $largeArc       Whether the arc should be greater than or less
+	 *                                      than 180 degrees.
+	 * @param  boolean      $sweep          Whether the arc should begin moving at negative angles
+	 *                                      or positive ones.
+	 * @param  Point|array  $point          The point to end the stroke at.
+	 * @param  boolean      $relative       Whether x, y of <code>$point</code> are relative
+	 *                                      (to the last point) or absolute.
 	 */
-	public function arc($rx, $ry, $xAxisRotation, $largeArc, $sweep, $x, $y, $relative = false)
+	public function arc($rx, $ry, $xAxisRotation, $largeArc, $sweep, $point, $relative = false)
 	{
+		$point = self::point($point);
 		$largeArc = $largeArc ? '1' : '0';
 		$sweep = $sweep ? '1' : '0';
-		return $this->addPathCommand('A', "$rx $ry $xAxisRotation $largeArc $sweep $x $y",
-				$relative);
+		return $this->addPathCommand('A',
+				"$rx $ry $xAxisRotation $largeArc $sweep $point->x,$point->y", $relative);
+	}
+
+	/**
+	 * Adds path commands to draw a rectangle.
+	 *
+	 * @param  Point|array  $corner  The top left corner.
+	 * @param  float        $width
+	 * @param  float        $height
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function rectanglePath($corner, $width, $height, $ccw = false)
+	{
+		return $this->anyPolygonPath(Points::create($ccw)
+				->rectangle(self::point($corner), $width, $height));
+	}
+
+	/**
+	 * Adds path commands to draw a regular polygon.
+	 *
+	 * @param  Point|array  $center
+	 * @param  int          $n       Number of corners.
+	 * @param  float        $radius
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function polygonPath($center, $n, $radius, $ccw = false)
+	{
+		return $this->anyPolygonPath(Points::create()->ccw($ccw)
+				->polygon(self::point($center), $n, $radius));
+	}
+
+	/**
+	 * Adds path commands to draw a regular star polygon.
+	 *
+	 * @param  Point|array  $center
+	 * @param  int          $n       Number of corners of the underlying polygon.
+	 * @param  float        $radius  Radius of the underlying polygon.
+	 * @param  float        $radii   Related to <code>$radius</code>.
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function starPath($center, $n, $radius, $radii, $ccw = false)
+	{
+		return $this->anyPolygonPath(Points::create()->ccw($ccw)
+				->star(self::point($center), $n, $radius, $radii));
+	}
+
+	/**
+	 * Adds path commands to draw any polygon.
+	 *
+	 * @param Points $points
+	 */
+	public function anyPolygonPath(Points $points)
+	{
+		$points = $points->points;
+		$this->moveTo($points[0]);
+		$count = count($points);
+		for ($i = 1; $i < $count; $i++) {
+			$this->lineTo($points[$i]);
+		}
+		return $this->closePath();
 	}
 
 	/**
@@ -641,5 +606,15 @@ class Svg extends Xml implements XLinkConstants
 	public function setRotate($rotate)
 	{
 		return $this->complexAttrib('rotate', $rotate);
+	}
+
+	private static function point($point)
+	{
+		return is_array($point) ? Point::create($point[0], $point[1]) : $point;
+	}
+
+	private static function angle($angle)
+	{
+		return is_scalar($angle) ? Angle::byDegrees($angle) : $angle;
 	}
 }
