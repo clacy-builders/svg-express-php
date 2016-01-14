@@ -525,6 +525,63 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
+	 * Adds path commands to draw a circle.
+	 *
+	 * @param  Point|array  $center
+	 * @param  float        $radius
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function circlePath($center, $radius, $ccw = false)
+	{
+		return $this->ellipsePath($center, $radius, $radius, 0, $ccw);
+	}
+
+	/**
+	 * Adds path commands to draw an ellipse.
+	 * @param  Point|array[]  $center
+	 * @param  float          $rx
+	 * @param  float          $ry
+	 * @param  float          $xAxisRotation
+	 * @param  boolean        $ccw            Whether to draw counterclockwise or not.
+	 */
+	public function ellipsePath($center, $rx, $ry, $xAxisRotation = 0, $ccw = false)
+	{
+		$center = self::point($center);
+		$angle = self::angle($xAxisRotation);
+		$point1 = Point::create($center->x + $rx, $center->y)->rotate($center, $angle);
+		$point2 = Point::create($center->x - $rx, $center->y)->rotate($center, $angle);
+		$sweep = !$ccw;
+		return $this->moveTo($point1)
+				->arc($rx, $ry, $xAxisRotation, false, $sweep, $point2)
+				->arc($rx, $ry, $xAxisRotation, false, $sweep, $point1);
+	}
+
+	/**
+	 * Adds path commands to draw a sector of a circle.
+	 *
+	 * @param  Point|array  $center
+	 * @param  Angle|float  $start
+	 * @param  Angle|float  $stop
+	 * @param  float        $radius
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function sectorPath($center, $start, $stop, $radius, $ccw = false)
+	{
+		if ($ccw) { $swap = $start; $start = $stop; $stop = $swap; }
+		$start = self::angle($start);
+		$stop = self::angle($stop);
+		$points = Points::create()->sector(self::point($center), $start, $stop, $radius)->points;
+
+		$largeArc = abs($stop->radians - $start->radians) >= pi();
+		$sweep = $stop->radians > $start->radians;
+
+		return $this->moveTo($points[0])
+				->lineTo($points[1])
+				->arc($radius, $radius, 0, $largeArc, $sweep, $points[2])
+				->closePath();
+	}
+
+	/**
 	 * The dx attribute.
 	 *
 	 * @param dx mixed

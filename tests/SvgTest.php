@@ -2,19 +2,13 @@
 
 namespace ML_Express\SVG\Tests;
 
-require_once 'vendor/ml-express/xml/src/Xml.php';
-require_once 'vendor/ml-express/xml/src/XmlAttributes.php';
-require_once 'vendor/ml-express/xml/src/shared/ClassAttribute.php';
-require_once 'vendor/ml-express/xml/src/shared/StyleAttribute.php';
-require_once 'vendor/ml-express/xml/src/shared/XLink.php';
-require_once 'vendor/ml-express/xml/src/shared/XLinkConstants.php';
+require_once 'vendor/ml-express/xml/allIncl.php';
 require_once 'vendor/ml-express/xml/tests/Express_TestCase.php';
-require_once 'vendor/ml-express/graphics/src/Point.php';
-require_once 'vendor/ml-express/graphics/src/Points.php';
-require_once 'vendor/ml-express/graphics/src/Angle.php';
+require_once 'vendor/ml-express/graphics/allIncl.php';
 require_once 'src/Svg.php';
 
 use ML_Express\Tests\Express_TestCase;
+use ML_Express\Graphics\Angle;
 use ML_Express\Graphics\Point;
 use ML_Express\Graphics\Points;
 use ML_Express\SVG\Svg;
@@ -229,7 +223,7 @@ class SvgTest extends Express_TestCase
 		);
 	}
 
-	public function testSetPolygonPath()
+	public function testAnyPolygonPath()
 	{
 		$this->assertExpectedMarkup(Svg::createSub()->path()->anyPolygonPath(
 				Points::create()->polygon(Point::create(10, 20), 4, 100)),
@@ -238,10 +232,16 @@ class SvgTest extends Express_TestCase
 
 	public function rectanglePathProvider()
 	{
-		return [[Svg::createSub()->path()->rectanglePath([10, 20], 100, 80),
-				'<path d="M 10,20 L 110,20 L 110,100 L 10,100 Z"/>'], [
-				Svg::createSub()->path()->rectanglePath([10, 20], 100, 80, true),
-				'<path d="M 10,20 L 10,100 L 110,100 L 110,20 Z"/>']];
+		return array(
+				array(
+						Svg::createSub()->path()->rectanglePath([10, 20], 100, 80),
+						'<path d="M 10,20 L 110,20 L 110,100 L 10,100 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->rectanglePath([10, 20], 100, 80, true),
+						'<path d="M 10,20 L 10,100 L 110,100 L 110,20 Z"/>'
+				)
+		);
 	}
 
 	/**
@@ -254,10 +254,16 @@ class SvgTest extends Express_TestCase
 
 	public function polygonPathProvider()
 	{
-		return [[Svg::createSub()->path()->polygonPath([10, 20], 4, 100),
-				'<path d="M 10,-80 L 110,20 L 10,120 L -90,20 Z"/>'], [
-				Svg::createSub()->path()->polygonPath([10, 20], 4, 100, true),
-				'<path d="M 10,-80 L -90,20 L 10,120 L 110,20 Z"/>']];
+		return array(
+				array(
+						Svg::createSub()->path()->polygonPath([10, 20], 4, 100),
+						'<path d="M 10,-80 L 110,20 L 10,120 L -90,20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->polygonPath([10, 20], 4, 100, true),
+						'<path d="M 10,-80 L -90,20 L 10,120 L 110,20 Z"/>'
+				)
+		);
 	}
 
 	/**
@@ -270,20 +276,117 @@ class SvgTest extends Express_TestCase
 
 	public function starPathProvider()
 	{
-		return [[Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5),
-				'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'], [
-				Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5, true),
-				'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>'], [
-				Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5]),
-				'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'], [
-				Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5], true),
-				'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>']];
+		return array(
+				array(
+						Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5),
+						'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5, true),
+						'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5]),
+						'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5], true),
+						'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>'
+				)
+		);
 	}
 
 	/**
 	 * @dataProvider starPathProvider
 	 */
 	public function testStarPath($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+	public function circlePathProvider()
+	{
+		return array(
+				array(
+						Svg::createSub()->path()->circlePath([10, 20], 100),
+						'<path d="M 110,20 A 100 100 0 0 1 -90,20 A 100 100 0 0 1 110,20"/>'
+				),
+				array(
+						Svg::createSub()->path()->circlePath([10, 20], 100, true),
+						'<path d="M 110,20 A 100 100 0 0 0 -90,20 A 100 100 0 0 0 110,20"/>'
+				)
+		);
+	}
+
+	/**
+	 * @dataProvider circlePathProvider
+	 */
+	public function testCirclePath($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+	public function ellipsePathProvider()
+	{
+		return array(
+				array(
+						Svg::createSub()->path()->ellipsePath([10, 20], 100, 50),
+						'<path d="M 110,20 A 100 50 0 0 1 -90,20 A 100 50 0 0 1 110,20"/>'
+				),
+				array(
+						Svg::createSub()->path()->ellipsePath([10, 20], 100, 50, 90, true),
+						'<path d="M 10,120 A 100 50 90 0 0 10,-80 A 100 50 90 0 0 10,120"/>'
+				)
+		);
+	}
+
+	/**
+	 * @dataProvider ellipsePathProvider
+	 */
+	public function testEllipsePath($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+	public function sectorPathProvider()
+	{
+		$a = [];
+		foreach ([30, 60, 215] as $i => $degrees) {
+			$angle = Angle::byDegrees($degrees);
+			$a[] = array(
+					'a' => $angle,
+					's' => $angle->sin * 50 + 20,
+					'c' => $angle->cos * 50 + 10
+			);
+		}
+		return array(
+				array(
+						Svg::createSub()->path()->sectorPath([10, 20], 30, 60, 50),
+						"<path d=\"M 10,20 L {$a[0]['c']},{$a[0]['s']} " .
+						"A 50 50 0 0 1 {$a[1]['c']},{$a[1]['s']} Z\"/>"
+				),
+				array(
+						Svg::createSub()->path()->sectorPath([10, 20], 30, 215, 50),
+						"<path d=\"M 10,20 L {$a[0]['c']},{$a[0]['s']} " .
+						"A 50 50 0 1 1 {$a[2]['c']},{$a[2]['s']} Z\"/>"
+				),
+				array(
+						Svg::createSub()->path()->sectorPath([10, 20], 30, 60, 50, true),
+						"<path d=\"M 10,20 L {$a[1]['c']},{$a[1]['s']} " .
+						"A 50 50 0 0 0 {$a[0]['c']},{$a[0]['s']} Z\"/>"
+				),
+				array(
+						Svg::createSub()->path()->sectorPath([10, 20], 60, 30, 50),
+						"<path d=\"M 10,20 L {$a[1]['c']},{$a[1]['s']} " .
+						"A 50 50 0 0 0 {$a[0]['c']},{$a[0]['s']} Z\"/>"
+				)
+		);
+	}
+
+	/**
+	 * @dataProvider sectorPathProvider
+	 */
+	public function testSectorPath($xml, $expectedMarkup)
 	{
 		$this->assertExpectedMarkup($xml, $expectedMarkup);
 	}
