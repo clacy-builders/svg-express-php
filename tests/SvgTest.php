@@ -278,19 +278,19 @@ class SvgTest extends Express_TestCase
 	{
 		return array(
 				array(
-						Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5),
+						Svg::createSub()->path()->starPath([10, 20], 2, 100, 50),
 						'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'
 				),
 				array(
-						Svg::createSub()->path()->starPath([10, 20], 2, 100, 0.5, true),
+						Svg::createSub()->path()->starPath([10, 20], 2, 100, 50, true),
 						'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>'
 				),
 				array(
-						Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5]),
+						Svg::createSub()->path()->starPath([10, 20], 1, 100, [50, 100, 50]),
 						'<path d="M 10,-80 L 60,20 L 10,120 L -40,20 Z"/>'
 				),
 				array(
-						Svg::createSub()->path()->starPath([10, 20], 1, 100, [0.5, 1, 0.5], true),
+						Svg::createSub()->path()->starPath([10, 20], 1, 100, [50, 100, 50], true),
 						'<path d="M 10,-80 L -40,20 L 10,120 L 60,20 Z"/>'
 				)
 		);
@@ -374,11 +374,6 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->path()->sectorPath([10, 20], 30, 60, 50, true),
 						"<path d=\"M 10,20 L {$a[1]['c']},{$a[1]['s']} " .
 						"A 50 50 0 0 0 {$a[0]['c']},{$a[0]['s']} Z\"/>"
-				),
-				array(
-						Svg::createSub()->path()->sectorPath([10, 20], 60, 30, 50),
-						"<path d=\"M 10,20 L {$a[1]['c']},{$a[1]['s']} " .
-						"A 50 50 0 0 0 {$a[0]['c']},{$a[0]['s']} Z\"/>"
 				)
 		);
 	}
@@ -387,6 +382,52 @@ class SvgTest extends Express_TestCase
 	 * @dataProvider sectorPathProvider
 	 */
 	public function testSectorPath($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+	public function ringSectorPathProvider()
+	{
+		$a = [];
+		foreach ([30, 60, 215] as $i => $degrees) {
+			$angle = Angle::byDegrees($degrees);
+			foreach ([50, 25] as $r) {
+				$a[] = array(
+						'a' => $angle,
+						's' => $angle->sin * $r + 20,
+						'c' => $angle->cos * $r + 10
+				);
+			}
+		}
+		return array(
+				array(
+						Svg::createSub()->path()->ringSectorPath([10, 20], 30, 60, 50, 25),
+						"<path d=\"M {$a[0]['c']},{$a[0]['s']} " .
+						"A 50 50 0 0 1 {$a[2]['c']},{$a[2]['s']} " .
+						"L {$a[3]['c']},{$a[3]['s']} " .
+						"A 25 25 0 0 0 {$a[1]['c']},{$a[1]['s']} Z\"/>"
+				),
+				array(
+						Svg::createSub()->path()->ringSectorPath([10, 20], 30, 215, 50, 25),
+						"<path d=\"M {$a[0]['c']},{$a[0]['s']} " .
+						"A 50 50 0 1 1 {$a[4]['c']},{$a[4]['s']} " .
+						"L {$a[5]['c']},{$a[5]['s']} " .
+						"A 25 25 0 1 0 {$a[1]['c']},{$a[1]['s']} Z\"/>"
+				),
+				array(
+						Svg::createSub()->path()->ringSectorPath([10, 20], 30, 60, 50, 25, true),
+						"<path d=\"M {$a[2]['c']},{$a[2]['s']} " .
+						"A 50 50 0 0 0 {$a[0]['c']},{$a[0]['s']} " .
+						"L {$a[1]['c']},{$a[1]['s']} " .
+						"A 25 25 0 0 1 {$a[3]['c']},{$a[3]['s']} Z\"/>"
+				)
+		);
+	}
+
+	/**
+	 * @dataProvider ringSectorPathProvider
+	 */
+	public function testRingSectorPath($xml, $expectedMarkup)
 	{
 		$this->assertExpectedMarkup($xml, $expectedMarkup);
 	}

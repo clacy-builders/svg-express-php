@@ -499,7 +499,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $center
 	 * @param  int          $n       Number of corners of the underlying polygon.
 	 * @param  float        $radius  Radius of the underlying polygon.
-	 * @param  float        $radii   Related to <code>$radius</code>.
+	 * @param  float        $radii
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
 	 */
 	public function starPath($center, $n, $radius, $radii, $ccw = false)
@@ -561,23 +561,46 @@ class Svg extends Xml implements XLinkConstants
 	 *
 	 * @param  Point|array  $center
 	 * @param  Angle|float  $start
-	 * @param  Angle|float  $stop
+	 * @param  Angle|float  $stop    Must be greater than <code>$start</code>.
 	 * @param  float        $radius
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
 	 */
 	public function sectorPath($center, $start, $stop, $radius, $ccw = false)
 	{
-		if ($ccw) { $swap = $start; $start = $stop; $stop = $swap; }
 		$start = self::angle($start);
 		$stop = self::angle($stop);
-		$points = Points::create()->sector(self::point($center), $start, $stop, $radius)->points;
+		$points = Points::create()->ccw($ccw)
+				->sector(self::point($center), $start, $stop, $radius)->points;
 
-		$largeArc = abs($stop->radians - $start->radians) >= pi();
-		$sweep = $stop->radians > $start->radians;
-
+		$largeArc = $stop->radians - $start->radians >= pi();
 		return $this->moveTo($points[0])
 				->lineTo($points[1])
-				->arc($radius, $radius, 0, $largeArc, $sweep, $points[2])
+				->arc($radius, $radius, 0, $largeArc, !$ccw, $points[2])
+				->closePath();
+	}
+
+	/**
+	 * Adds path commands to draw a sector of a circle.
+	 *
+	 * @param  Point|array  $center
+	 * @param  Angle|float  $start
+	 * @param  Angle|float  $span
+	 * @param  float        $radius       Must be greater than <code>$start</code>.
+	 * @param  float        $innerRadius
+	 * @param  boolean      $ccw          Whether to draw counterclockwise or not.
+	 */
+	public function ringSectorPath($center, $start, $stop, $radius, $innerRadius, $ccw = false)
+	{
+		$start = self::angle($start);
+		$stop = self::angle($stop);
+		$points = Points::create()->ccw($ccw)
+				->ringSector(self::point($center), $start, $stop, $radius, $innerRadius)->points;
+
+		$largeArc = $stop->radians - $start->radians >= pi();
+		return $this->moveTo($points[0])
+				->arc($radius, $radius, 0, $largeArc, !$ccw, $points[1])
+				->lineTo($points[2])
+				->arc($innerRadius, $innerRadius, 0, $largeArc, $ccw, $points[3])
 				->closePath();
 	}
 
