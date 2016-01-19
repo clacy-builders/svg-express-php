@@ -226,7 +226,7 @@ class SvgTest extends Express_TestCase
 	public function testAnyPolygonPath()
 	{
 		$this->assertExpectedMarkup(Svg::createSub()->path()->anyPolygonPath(
-				Points::create()->polygon(Point::create(10, 20), 4, 100)),
+				Points::polygon(Point::create(10, 20), 4, 100)),
 				'<path d="M 10,-80 L 110,20 L 10,120 L -90,20 Z"/>');
 	}
 

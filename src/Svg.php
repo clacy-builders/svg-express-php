@@ -475,8 +475,8 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function rectanglePath($corner, $width, $height, $ccw = false)
 	{
-		return $this->anyPolygonPath(Points::create($ccw)
-				->rectangle(self::point($corner), $width, $height));
+		return $this->anyPolygonPath(
+				Points::rectangle(self::point($corner), $width, $height, $ccw));
 	}
 
 	/**
@@ -489,8 +489,7 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function polygonPath($center, $n, $radius, $ccw = false)
 	{
-		return $this->anyPolygonPath(Points::create()->ccw($ccw)
-				->polygon(self::point($center), $n, $radius));
+		return $this->anyPolygonPath(Points::polygon(self::point($center), $n, $radius, $ccw));
 	}
 
 	/**
@@ -504,8 +503,8 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function starPath($center, $n, $radius, $radii, $ccw = false)
 	{
-		return $this->anyPolygonPath(Points::create()->ccw($ccw)
-				->star(self::point($center), $n, $radius, $radii));
+		return $this->anyPolygonPath(
+				Points::star(self::point($center), $n, $radius, $radii, $ccw));
 	}
 
 	/**
@@ -569,8 +568,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		$start = self::angle($start);
 		$stop = self::angle($stop);
-		$points = Points::create()->ccw($ccw)
-				->sector(self::point($center), $start, $stop, $radius)->points;
+		$points = Points::sector(self::point($center), $start, $stop, $radius, $ccw)->points;
 
 		$largeArc = $stop->radians - $start->radians >= pi();
 		return $this->moveTo($points[0])
@@ -593,8 +591,8 @@ class Svg extends Xml implements XLinkConstants
 	{
 		$start = self::angle($start);
 		$stop = self::angle($stop);
-		$points = Points::create()->ccw($ccw)
-				->ringSector(self::point($center), $start, $stop, $radius, $innerRadius)->points;
+		$points = Points::ringSector(
+				self::point($center), $start, $stop, $radius, $innerRadius, $ccw)->points;
 
 		$largeArc = $stop->radians - $start->radians >= pi();
 		return $this->moveTo($points[0])
