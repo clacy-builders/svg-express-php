@@ -39,10 +39,8 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function rect($corner, $width, $height, $rx = null, $ry = null)
 	{
-		$corner = self::point($corner);
 		return $this->append('rect')
-				->attrib('x', $corner->x)
-				->attrib('y', $corner->y)
+				->pointAttrib($corner)
 				->attrib('width', $width)
 				->attrib('height', $height)
 				->attrib('rx', $rx)
@@ -50,22 +48,20 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The circle element.
+	 * The <code>circle</code> element.
 	 *
 	 * @param  Point|array  $center  Center of the circle.
 	 * @param  float        $r       The radius of the circle.
 	 */
 	public function circle($center, $r)
 	{
-		$center = self::point($center);
 		return $this->append('circle')
-				->attrib('cx', $center->x)
-				->attrib('cy', $center->y)
+				->pointAttrib($center, 'cx', 'cy')
 				->attrib('r', $r);
 	}
 
 	/**
-	 * The ellipse element.
+	 * The <code>ellipse</code> element.
 	 *
 	 * @param  Point|array  $center  The center of the ellipse.
 	 * @param  float        $rx      The x radius of the ellipse.
@@ -73,33 +69,27 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function ellipse($center, $rx, $ry)
 	{
-		$center = self::point($center);
 		return $this->append('ellipse')
-				->attrib('cx', $center->x)
-				->attrib('cy', $center->y)
+				->pointAttrib($center, 'cx', 'cy')
 				->attrib('rx', $rx)
 				->attrib('ry', $ry);
 	}
 
 	/**
-	 * The line element.
+	 * The <code>line</code> element.
 	 *
 	 * @param  Point|array  $point1
 	 * @param  Point|array  $point2
 	 */
 	public function line($point1, $point2)
 	{
-		$point1 = self::point($point1);
-		$point2 = self::point($point2);
 		return $this->append('line')
-				->attrib('x1', $point1->x)
-				->attrib('y1', $point1->y)
-				->attrib('x2', $point2->x)
-				->attrib('y2', $point2->y);
+				->pointAttrib($point1, 'x1', 'y1')
+				->pointAttrib($point2, 'x2', 'y2');
 	}
 
 	/**
-	 * The polyline element.
+	 * The <code>polyline</code> element.
 	 *
 	 * @param  string|array  $points  A space separated list of points which x and y coordinates
 	 *                                are comma separated.
@@ -112,11 +102,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The polygon element.
+	 * The <code>polygon</code> element.
 	 *
-	 * @param  string|array  $points  A space separated list of points which x and y coordinates
-	 *                                are comma separated.
-	 *                                Otherwise an array of arrays or <code>Point</code> objects.
+	 * @param  mixed  $points  A space separated list of points which x and y coordinates
+	 *                         are comma separated.
+	 *                         Otherwise a <code>Points</code> object, an array of arrays
+	 *                         or <code>Point</code> objects.
 	 */
 	public function polygon($points = null)
 	{
@@ -125,7 +116,22 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The path element.
+	 * The <code>polygon</code> element with the <code>points</code> attribute set for a regular
+	 * star polygon.
+	 *
+	 * @param  Point|array  $center
+	 * @param  int          $n       Number of corners of the underlying polygon.
+	 * @param  float        $radius  Radius of the underlying polygon.
+	 * @param  float        $radii
+	 */
+	public function star($center, $n, $radius, $radii = [])
+	{
+		return $this->polygon(Points::star(self::point($center), $n, $radius, $radii));
+	}
+
+
+	/**
+	 * The <code>path</code> element.
 	 *
 	 * @param  string  $d  A series of commands. You may use the following methods to build
 	 *                     this attribute:<ul><li><code>moveTo()</code>,
@@ -146,26 +152,18 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The text element.
+	 * The <code>text</code> element.
 	 *
-	 * @param content string [optional]
-	 * <p>You may append <code>tspan</code> or <code>tpath</code> instead.</p>
-	 *
-	 * @param x mixed [optional]
-	 * <p>One or more x values (comma separated or in an array).</p>
-	 *
-	 * @param y mixed [optional]
-	 * <p>One or more y values (comma separated or in an array).</p>
-	 *
-	 * @param dx mixed [optional]
-	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
-	 *
-	 * @param dy mixed [optional]
-	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
-	 *
-	 * @param rotate string|array [optional]
-	 * <p>makes each character rotate to its respective value, with remaining characters rotating
-	 * according to the last value. A space separated list or an array.</p>
+	 * @param  string  $content  You may append <code>tspan</code> or <code>tpath</code> instead.
+	 * @param  mixed   $x        One or more x values (comma separated or in an array).
+	 * @param  mixed   $y        One or more y values (comma separated or in an array).
+	 * @param  mixed   $dx       The horizontal offset. One or more values (comma separated or in
+	 *                           an array).
+	 * @param  mixed   $dy       The vertical offset. One or more values (comma separated or in
+	 *                           an array).
+	 * @param  mixed   $rotate   Makes each character rotate to its respective value, with
+	 *                           remaining characters rotating according to the last value.
+	 *                           A space separated list or an array.
 	 */
 	public function text($content = '', $x = null, $y = null, $dx = null, $dy = null,
 			$rotate = null)
@@ -177,25 +175,18 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The tspan element.
+	 * The <code>tspan</code> element.
 	 *
-	 * @param content string
-	 *
-	 * @param x mixed [optional]
-	 * <p>One or more x values (comma separated or in an array).</p>
-	 *
-	 * @param y mixed [optional]
-	 * <p>One or more y values (comma separated or in an array).</p>
-	 *
-	 * @param dx mixed [optional]
-	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
-	 *
-	 * @param dy mixed [optional]
-	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
-	 *
-	 * @param rotate string|array [optional]
-	 * <p>makes each character rotate to its respective value, with remaining characters rotating
-	 * according to the last value. A space separated list or an array.</p>
+	 * @param  string  $content
+	 * @param  mixed   $x        One or more x values (comma separated or in an array).
+	 * @param  mixed   $y        One or more y values (comma separated or in an array).
+	 * @param  mixed   $dx       The horizontal offset. One or more values (comma separated or in
+	 *                           an array).
+	 * @param  mixed   $dy       The vertical offset. One or more values (comma separated or in
+	 *                           an array).
+	 * @param  mixed   $rotate   Makes each character rotate to its respective value, with
+	 *                           remaining characters rotating according to the last value.
+	 *                           A space separated list or an array.
 	 */
 	public function tspan($content, $x = null, $y = null, $dx = null, $dy = null, $rotate = null)
 	{
@@ -206,13 +197,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The textPath element.
+	 * The <code>textPath</code> element.
 	 *
-	 * @param content string
-	 *
-	 * @param href string
-	 * <p>Fetches an arbitrary path and aligns the characters, that it encircles,
-	 * along this path.</p>
+	 * @param  string  $content
+	 * @param  string  $href     Fetches an arbitrary path and aligns the characters,
+	 *                           that it encircles, along this path.
 	 */
 	public function textPath($content, $href)
 	{
@@ -230,34 +219,25 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>use</code> element.
 	 *
-	 * @param href string
-	 * <p>A reference to an element/fragment within an SVG document.</p>
-	 *
-	 * @param x int|float [optional]
-	 * <p>The x-axis coordinate of the upper-left corner of the region into which the
-	 * referenced element is placed.</p>
-	 *
-	 * @param y int|float [optional]
-	 * <p>The y-axis coordinate of the upper-left corner of the region into which the
-	 * referenced element is placed.</p>
-	 *
-	 * @param width int|float [optional]
-	 * <p>The width of the region into which the referenced element is placed.</p>
-	 *
-	 * @param height int|float [optional]
-	 * <p>The height of the region into which the referenced element is placed.</p>
+	 * @param  string       $href    A reference to an element/fragment within an SVG document.
+	 * @param  Point|array  $corner  The upper-left corner of the region into which the
+	 *                               referenced element is placed.
+	 * @param  float        $width   The width of the region into which the referenced element
+	 *                               is placed.
+	 * @param  float        $height  The height of the region into which the referenced element
+	 *                               is placed.
 	 */
-	public function useElem($href, $x = null, $y = null, $width = null, $height = null)
+	public function useElem($href, $corner, $width = null, $height = null)
 	{
 		return $this->append('use')
 				->setXLinkHref($href)
-				->setXY($x, $y)
+				->pointAttrib($corner)
 				->attrib('width', $width)
 				->attrib('height', $height);
 	}
 
 	/**
-	 * The g element.
+	 * The <code>g</code> element.
 	 */
 	public function g()
 	{
@@ -267,7 +247,7 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>title</code> element.
 	 *
-	 * @param content string
+	 * @param  string  $content
 	 */
 	public function title($content)
 	{
@@ -277,7 +257,7 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>desc</code> element.
 	 *
-	 * @param content string
+	 * @param  string  $content
 	 */
 	public function desc($content)
 	{
@@ -285,7 +265,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The points attribute.
+	 * The <code>points</code> attribute.
 	 *
 	 * @param  string|array  $points  A space separated list of points which x and y coordinates
 	 *                                are comma separated.
@@ -303,7 +283,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * Adds a point to the points listened in the points attribute.
+	 * Adds a point to the points listened in The <code>points</code> attribute.
 	 *
 	 * @param  Point|array  $point
 	 */
@@ -501,7 +481,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $radii
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
 	 */
-	public function starPath($center, $n, $radius, $radii, $ccw = false)
+	public function starPath($center, $n, $radius, $radii = [], $ccw = false)
 	{
 		return $this->anyPolygonPath(
 				Points::star(self::point($center), $n, $radius, $radii, $ccw));
@@ -510,7 +490,7 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * Adds path commands to draw any polygon.
 	 *
-	 * @param Points $points
+	 * @param  Points  $points
 	 */
 	public function anyPolygonPath(Points $points)
 	{
@@ -537,11 +517,12 @@ class Svg extends Xml implements XLinkConstants
 
 	/**
 	 * Adds path commands to draw an ellipse.
-	 * @param  Point|array[]  $center
-	 * @param  float          $rx
-	 * @param  float          $ry
-	 * @param  float          $xAxisRotation
-	 * @param  boolean        $ccw            Whether to draw counterclockwise or not.
+	 *
+	 * @param  Point|array  $center
+	 * @param  float        $rx
+	 * @param  float        $ry
+	 * @param  float        $xAxisRotation
+	 * @param  boolean      $ccw            Whether to draw counterclockwise or not.
 	 */
 	public function ellipsePath($center, $rx, $ry, $xAxisRotation = 0, $ccw = false)
 	{
@@ -603,10 +584,34 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The dx attribute.
+	 * Adds path commands to draw a rounded rectangle.
 	 *
-	 * @param dx mixed
-	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 * @param  Point|array  $corner
+	 * @param  float        $width
+	 * @param  float        $height
+	 * @param  float        $radius
+	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 */
+	public function roundedRectanglePath($corner, $width, $height, $radius, $ccw = false)
+	{
+		$points = Points::roundedRectangle(
+				self::point($corner), $width, $height, $radius, $ccw)->points;
+		return $this->moveTo($points[0])
+				->arc($radius, $radius, 0, false, !$ccw, $points[1])
+				->lineTo($points[2])
+				->arc($radius, $radius, 0, false, !$ccw, $points[3])
+				->lineTo($points[4])
+				->arc($radius, $radius, 0, false, !$ccw, $points[5])
+				->lineTo($points[6])
+				->arc($radius, $radius, 0, false, !$ccw, $points[7])
+				->closePath();
+	}
+
+	/**
+	 * The <code>dx</code> attribute.
+	 *
+	 * @param  mixed  $dx  The horizontal offset. One or more values (comma separated or
+	 *                     in an array).
 	 */
 	public function setDx($dx)
 	{
@@ -614,10 +619,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The dy attribute.
+	 * The <code>dy</code> attribute.
 	 *
-	 * @param dy mixed
-	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
+	 * @param  mixed  $dy  The vertical offset. One or more values (comma separated or
+	 *                     in an array).
 	 */
 	public function setDy($dy)
 	{
@@ -627,11 +632,10 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * Sets dx and dy.
 	 *
-	 * @param dy mixed
-	 * <p>The vertical offset. One or more values (comma separated or in an array).</p>
-	 *
-	 * @param dx mixed
-	 * <p>The horizontal offset. One or more values (comma separated or in an array).</p>
+	 * @param  mixed  $dx  The horizontal offset. One or more values (comma separated or
+	 *                     in an array).
+	 * @param  mixed  $dy  The vertical offset. One or more values (comma separated or
+	 *                     in an array).
 	 */
 	public function setDxDy($dx, $dy)
 	{
@@ -639,10 +643,9 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The x attribute.
+	 * The <code>x</code> attribute.
 	 *
-	 * @param x mixed
-	 * <p>One or more x values (comma separated or in an array).</p>
+	 * @param  mixed  $x  One or more x values (comma separated or in an array).
 	 */
 	public function setX($x)
 	{
@@ -650,10 +653,9 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The y attribute.
+	 * The <code>y</code> attribute.
 	 *
-	 * @param y mixed
-	 * <p>One or more y values (comma separated or in an array).</p>
+	 * @param  mixed  $y  One or more y values (comma separated or in an array).
 	 */
 	public function setY($y)
 	{
@@ -663,11 +665,8 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * Sets x and y.
 	 *
-	 * @param x mixed
-	 * <p>One or more x values (comma separated or in an array).</p>
-	 *
-	 * @param y mixed
-	 * <p>One or more y values (comma separated or in an array).</p>
+	 * @param  mixed  $x  One or more x values (comma separated or in an array).
+	 * @param  mixed  $y  One or more y values (comma separated or in an array).
 	 */
 	public function setXY($x, $y)
 	{
@@ -675,15 +674,28 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The rotate attribute.
+	 * The <code>rotate</code> attribute.
 	 *
-	 * @param rotate string|array
-	 * <p>makes each character rotate to its respective value, with remaining characters rotating
-	 * according to the last value. A space separated list or an array.</p>
+	 * @param  mixed  Makes each character rotate to its respective value, with remaining
+	 *                characters rotating according to the last value. A space separated
+	 *                list or an array.
 	 */
 	public function setRotate($rotate)
 	{
 		return $this->complexAttrib('rotate', $rotate);
+	}
+
+	/**
+	 * Sets coordinates (two attributes belonging together).
+	 *
+	 * @param  Point|array  $point
+	 * @param  string       $xName  Name of the attribute which represents the x value.
+	 * @param  string       $yName  Name of the attribute which represents the y value.
+	 */
+	protected function pointAttrib($point, $xName = 'x', $yName = 'y')
+	{
+		$point = self::point($point);
+		return $this->attrib($xName, $point->x)->attrib($yName, $point->y);
 	}
 
 	private static function point($point)

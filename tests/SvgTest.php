@@ -202,7 +202,7 @@ class SvgTest extends Express_TestCase
 				),
 				// useElem()
 				array(
-						Svg::createSub()->useElem('#circle', 20, 30, 40, 50),
+						Svg::createSub()->useElem('#circle', [20, 30], 40, 50),
 						'<use xlink:href="#circle" x="20" y="30" width="40" height="50"/>'
 				),
 				// defs()
@@ -431,4 +431,53 @@ class SvgTest extends Express_TestCase
 	{
 		$this->assertExpectedMarkup($xml, $expectedMarkup);
 	}
+
+	public function roundedRectanglePathProvider()
+	{
+		return array(
+				array(
+						Svg::createSub()->path()->roundedRectanglePath([10, 20], 100, 80, 10),
+						'<path d="M 100,20 A 10 10 0 0 1 110,30 L 110,90 ' .
+						'A 10 10 0 0 1 100,100 L 20,100 A 10 10 0 0 1 10,90 ' .
+						'L 10,30 A 10 10 0 0 1 20,20 Z"/>'
+				),
+				array(
+						Svg::createSub()->path()->roundedRectanglePath([10, 20], 100, 80, 10, true),
+						'<path d="M 20,20 A 10 10 0 0 0 10,30 L 10,90 ' .
+						'A 10 10 0 0 0 20,100 L 100,100 A 10 10 0 0 0 110,90 ' .
+						'L 110,30 A 10 10 0 0 0 100,20 Z"/>'
+				)
+		);
+	}
+
+	/**
+	 * @dataProvider roundedRectanglePathProvider
+	 */
+	public function testRoundedRectanglePath($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+	public function starProvider()
+	{
+		return array(
+				array(
+						Svg::createSub()->star([10, 20], 2, 100, 50),
+						'<polygon points="10,-80 60,20 10,120 -40,20"/>'
+				),
+				array(
+						Svg::createSub()->star([10, 20], 1, 100, [50, 100, 50]),
+						'<polygon points="10,-80 60,20 10,120 -40,20"/>'
+				),
+		);
+	}
+
+	/**
+	 * @dataProvider starProvider
+	 */
+	public function testStar($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
 }
