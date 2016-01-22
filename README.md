@@ -18,6 +18,7 @@ Add the following to your project's `composer.json` file:
 }
 ```
 
+
 Run `composer install` or `composer update`.
 
 ## Basic usage
@@ -64,7 +65,7 @@ $svg->append('style')->appendText(".bgr {
             text-anchor: middle;
         }");
 $group = $svg->g();
-$group->rect(0, 0, 400, 400)->setClass('bgr');
+$group->rect([0, 0], 400, 400)->setClass('bgr');
 $group->text('Clicks 1/2015', 200, 45)->setClass('title');
 $solid = $group->polygon()->setClass('solid');
 $solid->setPoints([[350, 330], [50, 330]]);
@@ -74,8 +75,8 @@ $labels2 = $group->text()->setClass('labels');
 foreach ($dbRows as $i => $row) {
     $x = 50 + $i * 60;
     $y = (1000 - $row['clicks']) / 2;
-    $solid->addPoint($x, $y);
-    $graph->addPoint($x, $y);
+    $solid->addPoint([$x, $y]);
+    $graph->addPoint([$x, $y]);
     $labels1->tspan($row['clicks'], $x - 10, $y - 15);
     $labels2->tspan(
             strftime('%b', (new DateTime($row['month']))->getTimestamp()),
@@ -83,34 +84,37 @@ foreach ($dbRows as $i => $row) {
 }
 print $svg->getMarkup();
 ```
+
+The generated markup:
+
 ```svg
 <?xml version="1.0" encoding="UTF-8" ?>
 <svg width="400" height="400">
     <style>
         .bgr {
-            fill: #593;
-            fill-opacity: 0.25;
+        fill: #593;
+        fill-opacity: 0.25;
         }
         .graph {
-            fill: none;
-            stroke-width: 3px;
-            stroke: #593;
+        fill: none;
+        stroke-width: 3px;
+        stroke: #593;
         }
         .solid {
-            fill: #593;
-            fill-opacity: 0.5;
+        fill: #593;
+        fill-opacity: 0.5;
         }
         .labels, .title {
-            font-family: open sans, tahoma, verdana, sans-serif;
-            fill: 333;
-            stroke: none;
+        font-family: open sans, tahoma, verdana, sans-serif;
+        fill: 333;
+        stroke: none;
         }
         .labels {
-            font-size: 16px;
+        font-size: 16px;
         }
         .title {
-            font-size: 24px;
-            text-anchor: middle;
+        font-size: 24px;
+        text-anchor: middle;
         }
     </style>
     <g>

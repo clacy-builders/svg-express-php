@@ -273,7 +273,7 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	public function setPoints($points)
 	{
-		if (!is_string($points)) {
+		if (!is_string($points) && !empty($points)) {
 			foreach ($points as $point) {
 				$this->addPoint($point);
 			}

@@ -73,6 +73,10 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->polyline('2,2 2,4')->setPoints([Point::create(4, 4)]),
 						'<polyline points="2,2 2,4 4,4"/>'
 				),
+				array(
+						Svg::createSub()->polyline()->setPoints('2,2 2,4 4,4'),
+						'<polyline points="2,2 2,4 4,4"/>'
+				),
 				// addPoint()
 				array(
 						Svg::createSub()->polyline('2,2 2,4')->addPoint([4, 4]),
@@ -84,6 +88,14 @@ class SvgTest extends Express_TestCase
 				),
 				array(
 						Svg::createSub()->polyline('')->addPoint(Point::create(4, 4)),
+						'<polyline points="4,4"/>'
+				),
+				array(
+						Svg::createSub()->polyline()->addPoint([4, 4]),
+						'<polyline points="4,4"/>'
+				),
+				array(
+						Svg::createSub()->polyline()->addPoint(Point::create(4, 4)),
 						'<polyline points="4,4"/>'
 				),
 				// path()
