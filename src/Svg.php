@@ -21,8 +21,7 @@ class Svg extends Xml implements XLinkConstants
 
 	public static function createSvg($width = null, $height = null, $viewBox = null)
 	{
-		$class = get_called_class();
-		return (new $class('svg'))
+		return static::createRoot('svg')
 				->attrib('width', $width)
 				->attrib('height', $height)
 				->attrib('viewbox', $viewBox);
