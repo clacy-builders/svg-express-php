@@ -153,22 +153,22 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>text</code> element.
 	 *
-	 * @param  string  $content  You may append <code>tspan</code> or <code>tpath</code> instead.
-	 * @param  mixed   $x        One or more x values (comma separated or in an array).
-	 * @param  mixed   $y        One or more y values (comma separated or in an array).
-	 * @param  mixed   $dx       The horizontal offset. One or more values (comma separated or in
-	 *                           an array).
-	 * @param  mixed   $dy       The vertical offset. One or more values (comma separated or in
-	 *                           an array).
-	 * @param  mixed   $rotate   Makes each character rotate to its respective value, with
-	 *                           remaining characters rotating according to the last value.
-	 *                           A space separated list or an array.
+	 * @param  string       $content   You may append <code>tspan</code> or <code>tpath</code>
+	 *                                 instead.
+	 * @param  Point|array  $position  The position of the first letter. Use <code>setX()</code>,
+	 *                                 <code>setY()</code> to append more values.
+	 * @param  mixed        $dx        The horizontal offset. One or more values (comma separated
+	 *                                 or in an array).
+	 * @param  mixed        $dy        The vertical offset. One or more values (comma separated
+	 *                                 or in an array).
+	 * @param  mixed        $rotate    Makes each character rotate to its respective value, with
+	 *                                 remaining characters rotating according to the last value.
+	 *                                 A space separated list or an array.
 	 */
-	public function text($content = '', $x = null, $y = null, $dx = null, $dy = null,
-			$rotate = null)
+	public function text($content = '', $position = null, $dx = null, $dy = null, $rotate = null)
 	{
 		return $this->append('text', $content)
-				->setXY($x, $y)
+				->pointAttrib($position)
 				->setDxDy($dx, $dy)
 				->setRotate($rotate);
 	}
@@ -176,21 +176,21 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>tspan</code> element.
 	 *
-	 * @param  string  $content
-	 * @param  mixed   $x        One or more x values (comma separated or in an array).
-	 * @param  mixed   $y        One or more y values (comma separated or in an array).
-	 * @param  mixed   $dx       The horizontal offset. One or more values (comma separated or in
-	 *                           an array).
-	 * @param  mixed   $dy       The vertical offset. One or more values (comma separated or in
-	 *                           an array).
-	 * @param  mixed   $rotate   Makes each character rotate to its respective value, with
-	 *                           remaining characters rotating according to the last value.
-	 *                           A space separated list or an array.
+	 * @param  string       $content
+	 * @param  Point|array  $position  The position of the first letter. Use <code>setX()</code>,
+	 *                                 <code>setY()</code> to append more values.
+	 * @param  mixed        $dx        The horizontal offset. One or more values (comma separated
+	 *                                 or in an array).
+	 * @param  mixed        $dy        The vertical offset. One or more values (comma separated
+	 *                                 or in an array).
+	 * @param  mixed        $rotate    Makes each character rotate to its respective value, with
+	 *                                 remaining characters rotating according to the last value.
+	 *                                 A space separated list or an array.
 	 */
-	public function tspan($content, $x = null, $y = null, $dx = null, $dy = null, $rotate = null)
+	public function tspan($content, $position = null, $dx = null, $dy = null, $rotate = null)
 	{
 		return $this->append('tspan', $content)
-				->setXY($x, $y)
+				->pointAttrib($position)
 				->setDxDy($dx, $dy)
 				->setRotate($rotate);
 	}
@@ -693,8 +693,19 @@ class Svg extends Xml implements XLinkConstants
 	 */
 	protected function pointAttrib($point, $xName = 'x', $yName = 'y')
 	{
-		$point = self::point($point);
-		return $this->attrib($xName, $point->x)->attrib($yName, $point->y);
+		if (empty($point)) {
+			$x = null;
+			$y = null;
+		}
+		else if (is_array($point)) {
+			$x = $point[0];
+			$y = $point[1];
+		}
+		else {
+			$x = $point->x;
+			$y = $point->y;
+		}
+		return $this->attrib($xName, $x)->attrib($yName, $y);
 	}
 
 	private static function point($point)

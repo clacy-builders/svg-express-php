@@ -185,24 +185,34 @@ class SvgTest extends Express_TestCase
 				),
 				// text(), setX(), setY(), setDx(), setDy(), setXY(), setDxDy(), setRotate()
 				array(
-						Svg::createSub()->text('lorem ipsum', 20, 100),
+						Svg::createSub()->text('lorem ipsum', [20, 100]),
 						'<text x="20" y="100">lorem ipsum</text>'
 				),
 				array(
-						Svg::createSub()->text('lorem ipsum', [20, 30, 40], [100, 105]),
+						Svg::createSub()->text('lorem ipsum', [0, 0]),
+						'<text x="0" y="0">lorem ipsum</text>'
+				),
+				array(
+						Svg::createSub()->text('lorem ipsum')
+								->setY([100, 105])->setX([20, 30, 40]),
 						'<text x="20 30 40" y="100 105">lorem ipsum</text>'
 				),
 				array(
-						Svg::createSub()->text('lorem ipsum', 10, 10, [2, 3, 4], [1, 2]),
+						Svg::createSub()->text('lorem ipsum', [20, 100])
+								->setY(105)->setX([30, 40]),
+						'<text x="20 30 40" y="100 105">lorem ipsum</text>'
+				),
+				array(
+						Svg::createSub()->text('lorem ipsum', [10, 10], [2, 3, 4], [1, 2]),
 						'<text x="10" y="10" dx="2 3 4" dy="1 2">lorem ipsum</text>'
 				),
 				array(
-						Svg::createSub()->text('lorem ipsum', 10, 10, null, null, [15, 30, 45]),
+						Svg::createSub()->text('lorem ipsum', [10, 10], null, null, [15, 30, 45]),
 						'<text x="10" y="10" rotate="15 30 45">lorem ipsum</text>'
 				),
 				// tspan()
 				array(
-						Svg::createSub()->tspan('lorem ipsum', 10, 40,
+						Svg::createSub()->tspan('lorem ipsum', [10, 40],
 								[2, 3, 4], [1, 2], [15, 30, 45]),
 						'<tspan x="10" y="40" dx="2 3 4" dy="1 2" rotate="15 30 45">' .
 								'lorem ipsum</tspan>'
