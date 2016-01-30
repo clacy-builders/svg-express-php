@@ -697,7 +697,7 @@ class Svg extends Xml implements XLinkConstants
 			$x = null;
 			$y = null;
 		}
-		else if (is_array($point)) {
+		elseif (is_array($point)) {
 			$x = $point[0];
 			$y = $point[1];
 		}

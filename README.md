@@ -66,7 +66,7 @@ $svg->append('style')->appendText(".bgr {
         }");
 $group = $svg->g();
 $group->rect([0, 0], 400, 400)->setClass('bgr');
-$group->text('Clicks 1/2015', 200, 45)->setClass('title');
+$group->text('Clicks 1/2015', [200, 45])->setClass('title');
 $solid = $group->polygon()->setClass('solid');
 $solid->setPoints([[350, 330], [50, 330]]);
 $graph = $group->polyline()->setClass('graph');
@@ -77,10 +77,10 @@ foreach ($dbRows as $i => $row) {
     $y = (1000 - $row['clicks']) / 2;
     $solid->addPoint([$x, $y]);
     $graph->addPoint([$x, $y]);
-    $labels1->tspan($row['clicks'], $x - 10, $y - 15);
+    $labels1->tspan($row['clicks'], [$x - 10, $y - 15]);
     $labels2->tspan(
             strftime('%b', (new DateTime($row['month']))->getTimestamp()),
-            $x - 10, 350);
+            [$x - 10, 350]);
 }
 print $svg->getMarkup();
 ```
