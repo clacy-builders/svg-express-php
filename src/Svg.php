@@ -263,6 +263,31 @@ class Svg extends Xml implements XLinkConstants
 		return $this->append('desc', $content);
 	}
 
+	public function setViewBox($corner, $width, $height)
+	{
+		$corner = self::point($corner);
+		return $this->attrib('viewBox', "$corner->x $corner->y $width $height");
+	}
+
+	const PRESERVE_NONE = 'none';
+	const PRESERVE_XMINYMIN = 'xMinYMin';
+	const PRESERVE_XMINYMID = 'xMinYMid';
+	const PRESERVE_XMINYMAX = 'xMinYMax';
+	const PRESERVE_XMIDYMIN = 'xMidYMin';
+	const PRESERVE_XMIDYMID = 'xMidYMid';
+	const PRESERVE_XMIDYMAX = 'xMidYMax';
+	const PRESERVE_XMAXYMIN = 'xMaxYMin';
+	const PRESERVE_XMAXYMID = 'xMaxYMid';
+	const PRESERVE_XMAXYMAX = 'xMaxYMax';
+	const PRESERVE_MEET = ' meet';
+	const PRESERVE_SLICE = ' slice';
+
+	public function setPreserveAspectRatio($align, $slice = false, $defer = false)
+	{
+		return $this->attrib('preserveAspectRatio',
+				($defer ? 'defer ' : '') . $align . ($slice ? self::PRESERVE_SLICE : ''));
+	}
+
 	/**
 	 * The <code>points</code> attribute.
 	 *

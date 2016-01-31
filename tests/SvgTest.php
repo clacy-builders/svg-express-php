@@ -502,4 +502,18 @@ class SvgTest extends Express_TestCase
 		$this->assertExpectedMarkup($xml, $expectedMarkup);
 	}
 
+	public function testSetViewBox()
+	{
+		$this->assertExpectedMarkup(
+				Svg::createSub('svg')->setViewBox([0, 0], 640, 400),
+				'<svg viewBox="0 0 640 400"/>');
+	}
+
+	public function testSetPreserveAspectRatio()
+	{
+		$this->assertExpectedMarkup(
+				Svg::createSub('image')->setPreserveAspectRatio(Svg::PRESERVE_XMIDYMIN, true, true),
+				'<image preserveAspectRatio="defer xMidYMin slice"/>');
+	}
+
 }
