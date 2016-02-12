@@ -263,10 +263,94 @@ class Svg extends Xml implements XLinkConstants
 		return $this->append('desc', $content);
 	}
 
+	/**
+	 * The <code>filter</code> element.
+	 */
+	public function filter()
+	{
+		return $this->append('filter');
+	}
+
+	CONST MODE_NORMAL = 'normal';
+	CONST MODE_MULTIPLY = 'multiply';
+	CONST MODE_SCREEN = 'screen';
+	CONST MODE_DARKEN = 'darken';
+	CONST MODE_LIGHTEN = 'lighten';
+
+	/**
+	 * The <code>feBlend</code> filter primitive.
+	 *
+	 * @param  string|Svg  $in      See <code>setIn()</code>.
+	 * @param  string|Svg  $in2     See <code>setIn()</code>.
+	 * @param  string      $mode    One of these keywords:<ul>
+	 *                              <li><code>MODE_NORMAL</code>
+	 *                              <li><code>MODE_MULTIPLY</code>
+	 *                              <li><code>MODE_SCREEN</code>
+	 *                              <li><code>MODE_DARKEN</code>
+	 *                              <li><code>MODE_LIGHTEN</code></ul>
+	 * @param  string      $result  See <code>setResult()</code>.
+	 */
+	public function feBlend($in, $in2, $mode = null, $result = null)
+	{
+		return $this->append('feBlend')
+				->setIn($in)
+				->setIn($in2, 'in2')
+				->attrib('mode', $mode)
+				->setResult($result);
+	}
+
+	/**
+	 * The <code>feGaussianBlur</code> filter primitive.
+	 *
+	 * @param  mixed       $stdDeviation  Standard deviation along both axes, or comma separated
+	 *                                    for x-axis and y-axis respectively.
+	 * @param  string|Svg  $in            See <code>setIn()</code>.
+	 * @param  string      $result        See <code>setResult()</code>.
+	 */
+	public function feGaussianBlur($stdDeviation = null, $in = null, $result = null)
+	{
+		return $this->append('feGaussianBlur')
+				->setIn($in)
+				->attrib('stdDeviation', $stdDeviation)
+				->setResult($result);
+	}
+
+	/**
+	 * The <code>feOffset</code> filter primitive.
+	 *
+	 * @param  float       $dx      Shift along the x-axis.
+	 * @param  float       $dy      Shift along the y-axis.
+	 * @param  string|Svg  $in      See <code>setIn()</code>.
+	 * @param  string      $result  See <code>setResult()</code>.
+	 */
+	public function feOffset($dx, $dy, $in = null, $result = null)
+	{
+		return $this->append('feOffset')
+				->setIn($in)
+				->attrib('dx', $dx)
+				->attrib('dy', $dy)
+				->setResult($result);
+	}
+
+	/**
+	 * The <code>id</code> attribute.
+	 *
+	 * @param  string  $id
+	 */
+	public function setId($id)
+	{
+		return $this->attrib('id', $id);
+	}
+
 	public function setViewBox($corner, $width, $height)
 	{
+		return $this->attrib('viewBox', self::buildViewBox($corner, $width, $height));
+	}
+
+	public static function buildViewBox($corner, $width, $height)
+	{
 		$corner = self::point($corner);
-		return $this->attrib('viewBox', "$corner->x $corner->y $width $height");
+		return "$corner->x $corner->y $width $height";
 	}
 
 	const PRESERVE_NONE = 'none';
@@ -282,10 +366,32 @@ class Svg extends Xml implements XLinkConstants
 	const PRESERVE_MEET = ' meet';
 	const PRESERVE_SLICE = ' slice';
 
+	/**
+	 * The <code>preserveAspectRatio</code> attribute.
+	 *
+	 * @param  string   $align  One of the following values:<ul>
+	 *                          <li><code>Svg::PRESERVE_NONE</code>
+	 *                          <li><code>Svg::PRESERVE_XMINYMIN</code>
+	 *                          <li><code>Svg::PRESERVE_XMINYMID</code>
+	 *                          <li><code>Svg::PRESERVE_XMINYMAX</code>
+	 *                          <li><code>Svg::PRESERVE_XMIDYMIN</code>
+	 *                          <li><code>Svg::PRESERVE_XMIDYMID</code>
+	 *                          <li><code>Svg::PRESERVE_XMIDYMAX</code>
+	 *                          <li><code>Svg::PRESERVE_XMAXYMIN</code>
+	 *                          <li><code>Svg::PRESERVE_XMAXYMID</code>
+	 *                          <li><code>Svg::PRESERVE_XMAXYMAX</code></ul>
+	 * @param  boolean  $slice
+	 * @param  boolean  $defer
+	 */
 	public function setPreserveAspectRatio($align, $slice = false, $defer = false)
 	{
 		return $this->attrib('preserveAspectRatio',
-				($defer ? 'defer ' : '') . $align . ($slice ? self::PRESERVE_SLICE : ''));
+				self::buildPreserveAspectRatio($align, $slice, $defer));
+	}
+
+	public static function buildPreserveAspectRatio($align, $slice = false, $defer = false)
+	{
+		return ($defer ? 'defer ' : '') . $align . ($slice ? self::PRESERVE_SLICE : '');
 	}
 
 	/**
@@ -307,7 +413,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * Adds a point to the points listened in The <code>points</code> attribute.
+	 * Adds a point to the points listed in The <code>points</code> attribute.
 	 *
 	 * @param  Point|array  $point
 	 */
@@ -707,6 +813,44 @@ class Svg extends Xml implements XLinkConstants
 	public function setRotate($rotate)
 	{
 		return $this->complexAttrib('rotate', $rotate);
+	}
+
+	const IN_SOURCE_GRAPHIC = 'SourceGraphic';
+	const IN_SOURCE_ALPHA = 'SourceAlpha';
+	const IN_BACKGROUND_IMAGE = 'BackgroundImage';
+	const IN_BACKGROUND_ALPHA = 'BackgroundAlpha';
+	const IN_FILL_PAINT = 'FillPaint';
+	const IN_STROKE_PAINT = 'StrokePaint';
+
+	/**
+	 * The <code>in</code> attribute.
+	 *
+	 * @param  string|Svg  $in         A reference to a filter primitive (the value of its result
+	 *                                 attribute) or one of these keywords:<ul>
+	 *                                 <li><code>IN_SOURCE_GRAPHIC</code>
+	 *                                 <li><code>IN_SOURCE_ALPHA</code>
+	 *                                 <li><code>IN_BACKGROUND_IMAGE</code>
+	 *                                 <li><code>IN_BACKGROUND_ALPHA</code>
+	 *                                 <li><code>IN_FILL_PAINT</code>
+	 *                                 <li><code>IN_STROKE_PAINT</code></ul>
+	 * @param  string      $attribute  Name of the attribute: 'in' or 'in2'.
+	 */
+	public function setIn($in, $attribute = 'in')
+	{
+		if ($in instanceof Svg) {
+			$in = $in->attributes->getAttrib('result');
+		}
+		return $this->attrib($attribute, $in);
+	}
+
+	/**
+	 * The <code>result</code> attribute.
+	 *
+	 * @param  string  $result  A name for the current filter primitive, so it can be referenced.
+	 */
+	public function setResult($result)
+	{
+		return $this->attrib('result', $result);
 	}
 
 	/**

@@ -516,4 +516,55 @@ class SvgTest extends Express_TestCase
 				'<image preserveAspectRatio="defer xMidYMin slice"/>');
 	}
 
+	public function filterProvider()
+	{
+		return array(
+				// setIn()
+				array(
+						Svg::createSub()->feGaussianBlur(4)->setIn(Svg::IN_SOURCE_ALPHA),
+						'<feGaussianBlur in="SourceAlpha" stdDeviation="4"/>'
+				),
+				array(
+						Svg::createSub()->feGaussianBlur(4)->setIn('offset'),
+						'<feGaussianBlur in="offset" stdDeviation="4"/>'
+				),
+				array(
+						function() {
+							$offset = Svg::createSub()->feOffset(2, 2)->setResult('offset');
+							return Svg::createSub()->feGaussianBlur(4)->setIn($offset);
+						},
+						'<feGaussianBlur in="offset" stdDeviation="4"/>'
+				),
+				// setResult()
+				array(
+						Svg::createSub()->feGaussianBlur(4)->setResult('gb'),
+						'<feGaussianBlur stdDeviation="4" result="gb"/>'
+				),
+				// feBlend()
+				array(
+						Svg::createSub()->feBlend('fe1', 'fe2', Svg::MODE_DARKEN, 'fe3'),
+						'<feBlend in="fe1" in2="fe2" mode="darken" result="fe3"/>'
+				),
+				// feGaussianBlur()
+				array(
+						Svg::createSub()->feGaussianBlur('4,4', Svg::IN_BACKGROUND_ALPHA, 'gb'),
+						'<feGaussianBlur in="BackgroundAlpha" stdDeviation="4,4" result="gb"/>'
+				),
+				// feOffset()
+				array(
+						Svg::createSub()->feOffset(2, 1, Svg::IN_BACKGROUND_IMAGE, 'offset'),
+						'<feOffset in="BackgroundImage" dx="2" dy="1" result="offset"/>'
+				),
+		);
+	}
+
+	/**
+	 * @dataProvider filterProvider
+	 */
+	public function testFilter($xml, $expectedMarkup)
+	{
+		$this->assertExpectedMarkup($xml, $expectedMarkup);
+	}
+
+
 }
