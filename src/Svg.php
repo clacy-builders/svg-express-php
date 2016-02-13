@@ -283,11 +283,11 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  string|Svg  $in      See <code>setIn()</code>.
 	 * @param  string|Svg  $in2     See <code>setIn()</code>.
 	 * @param  string      $mode    One of these keywords:<ul>
-	 *                              <li><code>MODE_NORMAL</code>
-	 *                              <li><code>MODE_MULTIPLY</code>
-	 *                              <li><code>MODE_SCREEN</code>
-	 *                              <li><code>MODE_DARKEN</code>
-	 *                              <li><code>MODE_LIGHTEN</code></ul>
+	 *                              <li><code>Svg::MODE_NORMAL</code>
+	 *                              <li><code>Svg::MODE_MULTIPLY</code>
+	 *                              <li><code>Svg::MODE_SCREEN</code>
+	 *                              <li><code>Svg::MODE_DARKEN</code>
+	 *                              <li><code>Svg::MODE_LIGHTEN</code></ul>
 	 * @param  string      $result  See <code>setResult()</code>.
 	 */
 	public function feBlend($in, $in2, $mode = null, $result = null)
@@ -297,6 +297,83 @@ class Svg extends Xml implements XLinkConstants
 				->setIn($in2, 'in2')
 				->attrib('mode', $mode)
 				->setResult($result);
+	}
+
+	/**
+	 * The <code>feComponentTransfer</code> filter primitive.
+	 *
+	 * @param  string|Svg  $in      See <code>setIn()</code>.
+	 * @param  string      $result  See <code>setResult()</code>.
+	 */
+	public function feComponentTransfer($in = null, $result = null)
+	{
+		return $this->append('feComponentTransfer')
+				->setIn($in)
+				->setResult($result);
+	}
+
+	const CHANNEL_R = 'R';
+	const CHANNEL_G = 'G';
+	const CHANNEL_B = 'B';
+	const CHANNEL_A = 'A';
+	const CHANNEL_RGB = 0;
+	const CHANNEL_RGBA = 1;
+
+	const TYPE_IDENTITY = 'identity';
+	const TYPE_TABLE = 'table';
+	const TYPE_DISCRETE = 'discrete';
+	const TYPE_LINEAR = 'linear';
+	const TYPE_GAMMA = 'gamma';
+
+	protected function feFunc($channel, $type, $tableValues = null,
+			$slope = null, $intercept = null, $amplitude = null, $exponent = null, $offset = null)
+	{
+		if (\is_numeric($channel)) {
+			$channel = $channel
+					? [self::CHANNEL_R, self::CHANNEL_G, self::CHANNEL_B, self::CHANNEL_A]
+					: [self::CHANNEL_R, self::CHANNEL_G, self::CHANNEL_B];
+		}
+		if (\is_array($channel)) {
+			foreach ($channel as $channel) {
+				$this->feFunc($channel, $type, $tableValues, $slope, $intercept,
+						$amplitude, $exponent, $offset);
+			}
+			return $this;
+		}
+		return $this->append('feFunc' . $channel)
+				->attrib('type', $type)
+				->complexAttrib('tableValues', $tableValues, ',')
+				->attrib('slope', $slope)
+				->attrib('intercept', $intercept)
+				->attrib('amplitude', $amplitude)
+				->attrib('exponent', $exponent)
+				->attrib('offset', $offset);
+	}
+
+	public function feFuncIdentity($channel)
+	{
+		return $this->feFunc($channel, self::TYPE_IDENTITY);
+	}
+
+	public function feFuncTable($channel, $tableValues)
+	{
+		return $this->feFunc($channel, self::TYPE_TABLE, $tableValues);
+	}
+
+	public function feFuncDiscrete($channel, $tableValues)
+	{
+		return $this->feFunc($channel, self::TYPE_DISCRETE, $tableValues);
+	}
+
+	public function feFuncLinear($channel, $slope, $intercept = null)
+	{
+		return $this->feFunc($channel, self::TYPE_LINEAR, null, $slope, $intercept);
+	}
+
+	public function feFuncGamma($channel, $amplitude = null, $exponent = null, $offset = null)
+	{
+		return $this->feFunc($channel, self::TYPE_GAMMA, null, null, null,
+				$amplitude, $exponent, $offset);
 	}
 
 	/**
@@ -851,6 +928,16 @@ class Svg extends Xml implements XLinkConstants
 	public function setResult($result)
 	{
 		return $this->attrib('result', $result);
+	}
+
+	/**
+	 * The <code>tableValues</code> attribute.
+	 *
+	 * @param  mixed  $tableValues
+	 */
+	public function setTableValues($tableValues)
+	{
+		return $this->complexAttrib('tableValues', $tableValues);
 	}
 
 	/**

@@ -545,10 +545,48 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->feBlend('fe1', 'fe2', Svg::MODE_DARKEN, 'fe3'),
 						'<feBlend in="fe1" in2="fe2" mode="darken" result="fe3"/>'
 				),
+				// feComponentTransfer()
+				array(
+						Svg::createSub()->feComponentTransfer('fe1', 'fe2'),
+						'<feComponentTransfer in="fe1" result="fe2"/>'
+				),
+				// feFuncIdentity(), feFuncTable(), feFuncDiscrete(), feFuncLinear(), feFuncGamma()
+				array(
+						Svg::createSub()->feFuncIdentity(Svg::CHANNEL_RGBA),
+						'<feFuncR type="identity"/>' . "\n" .
+						'<feFuncG type="identity"/>' . "\n" .
+						'<feFuncB type="identity"/>' . "\n" .
+						'<feFuncA type="identity"/>'
+				),
+				array(
+						Svg::createSub()->feFuncTable(Svg::CHANNEL_RGB, [1, 0]),
+						'<feFuncR type="table" tableValues="1,0"/>' . "\n" .
+						'<feFuncG type="table" tableValues="1,0"/>' . "\n" .
+						'<feFuncB type="table" tableValues="1,0"/>'
+				),
+				array(
+						Svg::createSub()->feFuncDiscrete(Svg::CHANNEL_RGB, '0 0.5 1'),
+						'<feFuncR type="discrete" tableValues="0 0.5 1"/>' . "\n" .
+						'<feFuncG type="discrete" tableValues="0 0.5 1"/>' . "\n" .
+						'<feFuncB type="discrete" tableValues="0 0.5 1"/>'
+				),
+				array(
+						Svg::createSub()->feFuncLinear(Svg::CHANNEL_R, 0.5, 0.3),
+						'<feFuncR type="linear" slope="0.5" intercept="0.3"/>'
+				),
+				array(
+						Svg::createSub()->feFuncGamma(Svg::CHANNEL_G, 2, 3, 0),
+						'<feFuncG type="gamma" amplitude="2" exponent="3" offset="0"/>'
+				),
 				// feGaussianBlur()
 				array(
 						Svg::createSub()->feGaussianBlur('4,4', Svg::IN_BACKGROUND_ALPHA, 'gb'),
 						'<feGaussianBlur in="BackgroundAlpha" stdDeviation="4,4" result="gb"/>'
+				),
+				// feImage()
+				array(
+						Svg::createSub()->feImage('#img', Svg::PRESERVE_XMAXYMAX, 'fe2'),
+						'<feImage xlink:href="#img" preserveAspectRatio="xMaxYMax" result="fe2"/>'
 				),
 				// feOffset()
 				array(
