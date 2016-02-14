@@ -393,6 +393,44 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
+	 * The <code>feImage</code> filter primitive.
+	 *
+	 * @param  string      $href                 The source.
+	 * @param  string      $preserveAspectRatio  See <code>setPreserveAspectRatio()</code>.
+	 * @param  string      $result
+	 * @param  Pont|array  $position
+	 * @param  mixed       $width
+	 * @param  mixed       $height
+	 */
+	public function feImage($href, $preserveAspectRatio = null,
+			$result = null, $position = null, $width = null, $height = null)
+	{
+		return $this->append('feImage')
+				->setXLinkHref($href)
+				->setPreserveAspectRatio($preserveAspectRatio)
+				->pointAttrib($position)
+				->attrib('width', $width)
+				->attrib('height', $height)
+				->setResult($result);
+	}
+
+	/**
+	 * The <code>feMerge</code> filter primitive.
+	 *
+	 * @param  array   $in      The values for the <code>in</code> attributes of the
+	 *                          <code>feMergeNode</code> subelements.
+	 * @param  string  $result  See <code>setResult()</code>.
+	 */
+	public function feMerge($in, $result = null)
+	{
+		$fm = $this->append('feMerge')->setResult($result);
+		foreach ($in as $in) {
+			$fm->append('feMergeNode')->setIn($in);
+		}
+		return $fm;
+	}
+
+	/**
 	 * The <code>feOffset</code> filter primitive.
 	 *
 	 * @param  float       $dx      Shift along the x-axis.

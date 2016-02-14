@@ -585,8 +585,15 @@ class SvgTest extends Express_TestCase
 				),
 				// feImage()
 				array(
-						Svg::createSub()->feImage('#img', Svg::PRESERVE_XMAXYMAX, 'fe2'),
-						'<feImage xlink:href="#img" preserveAspectRatio="xMaxYMax" result="fe2"/>'
+						Svg::createSub()->feImage('img.jpg', Svg::PRESERVE_XMAXYMAX, 'i',
+								[0, 50], 300, 200),
+						'<feImage xlink:href="img.jpg" preserveAspectRatio="xMaxYMax"' .
+						' x="0" y="50" width="300" height="200" result="i"/>'
+				),
+				// feMerge()
+				array(
+						Svg::createSub()->inLine()->feMerge([null, 'fe2'], 'm'),
+						'<feMerge result="m"><feMergeNode/><feMergeNode in="fe2"/></feMerge>'
 				),
 				// feOffset()
 				array(
