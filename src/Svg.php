@@ -388,7 +388,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		return $this->append('feGaussianBlur')
 				->setIn($in)
-				->attrib('stdDeviation', $stdDeviation)
+				->complexAttrib('stdDeviation', $stdDeviation)
 				->setResult($result);
 	}
 

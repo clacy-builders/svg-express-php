@@ -580,8 +580,8 @@ class SvgTest extends Express_TestCase
 				),
 				// feGaussianBlur()
 				array(
-						Svg::createSub()->feGaussianBlur('4,4', Svg::IN_BACKGROUND_ALPHA, 'gb'),
-						'<feGaussianBlur in="BackgroundAlpha" stdDeviation="4,4" result="gb"/>'
+						Svg::createSub()->feGaussianBlur([4, 4], Svg::IN_BACKGROUND_ALPHA, 'gb'),
+						'<feGaussianBlur in="BackgroundAlpha" stdDeviation="4 4" result="gb"/>'
 				),
 				// feImage()
 				array(
