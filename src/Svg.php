@@ -5,7 +5,9 @@ namespace ML_Express\SVG;
 use ML_Express\Xml;
 use ML_Express\Shared\XLink;
 use ML_Express\Shared\XLinkConstants;
+use ML_Express\Shared\AddQuery;
 use ML_Express\Shared\ClassAttribute;
+use ML_Express\Shared\DimensionAttributes;
 use ML_Express\Shared\StyleAttribute;
 use ML_Express\Graphics\Point;
 use ML_Express\Graphics\Points;
@@ -13,7 +15,7 @@ use ML_Express\Graphics\Angle;
 
 class Svg extends Xml implements XLinkConstants
 {
-	use XLink, ClassAttribute, StyleAttribute;
+	use XLink, AddQuery, DimensionAttributes, ClassAttribute, StyleAttribute;
 
 	const MIME_TYPE = 'image/svg+xml';
 	const FILENAME_EXTENSION = 'svg';
@@ -22,8 +24,7 @@ class Svg extends Xml implements XLinkConstants
 	public static function createSvg($width = null, $height = null, $viewBox = null)
 	{
 		return static::createRoot('svg')
-				->attrib('width', $width)
-				->attrib('height', $height)
+				->setDimensions($width, $height)
 				->attrib('viewbox', $viewBox);
 	}
 
@@ -40,8 +41,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		return $this->append('rect')
 				->pointAttrib($corner)
-				->attrib('width', $width)
-				->attrib('height', $height)
+				->setDimensions($width, $height)
 				->attrib('rx', $rx)
 				->attrib('ry', $ry);
 	}
@@ -231,8 +231,7 @@ class Svg extends Xml implements XLinkConstants
 		return $this->append('use')
 				->setXLinkHref($href)
 				->pointAttrib($corner)
-				->attrib('width', $width)
-				->attrib('height', $height);
+				->setDimensions($width, $height);
 	}
 
 	/**
@@ -409,8 +408,7 @@ class Svg extends Xml implements XLinkConstants
 				->setXLinkHref($href)
 				->setPreserveAspectRatio($preserveAspectRatio)
 				->pointAttrib($position)
-				->attrib('width', $width)
-				->attrib('height', $height)
+				->setDimensions($width, $height)
 				->setResult($result);
 	}
 
