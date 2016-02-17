@@ -242,6 +242,13 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->title('Foo Bar')->getRoot()->desc('lorem ipsum'),
 						"<title>Foo Bar</title>\n<desc>lorem ipsum</desc>"
 				),
+				// image()
+				array(
+						Svg::createSub()->image('cat.jpg', [80, 20], 320, 200,
+								Svg::PRESERVE_XMIDYMID),
+						'<image xlink:href="cat.jpg" x="80" y="20" width="320" height="200"' .
+						' preserveAspectRatio="xMidYMid"/>'
+				)
 		);
 	}
 

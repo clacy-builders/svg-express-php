@@ -151,6 +151,25 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
+	 * The <code>image</code> element.
+	 *
+	 * @param  string       $href
+	 * @param  Point|array  $position             The top left corner of the image.
+	 * @param  mixed        $width
+	 * @param  mixed        $height
+	 * @param  string       $preserveAspectRatio  See <code>setPreserveAspectRatio()</code>.
+	 */
+	public function image($href, $position = null,
+			$width = null, $height = null, $preserveAspectRatio = null)
+	{
+		return $this->append('image')
+				->setXLinkHref($href)
+				->pointAttrib($position)
+				->setDimensions($width, $height)
+				->setPreserveAspectRatio($preserveAspectRatio);
+	}
+
+	/**
 	 * The <code>text</code> element.
 	 *
 	 * @param  string       $content   You may append <code>tspan</code> or <code>tpath</code>
@@ -394,12 +413,12 @@ class Svg extends Xml implements XLinkConstants
 	/**
 	 * The <code>feImage</code> filter primitive.
 	 *
-	 * @param  string      $href                 The source.
-	 * @param  string      $preserveAspectRatio  See <code>setPreserveAspectRatio()</code>.
-	 * @param  string      $result
-	 * @param  Pont|array  $position
-	 * @param  mixed       $width
-	 * @param  mixed       $height
+	 * @param  string       $href                 The source.
+	 * @param  string       $preserveAspectRatio  See <code>setPreserveAspectRatio()</code>.
+	 * @param  string       $result
+	 * @param  Point|array  $position
+	 * @param  mixed        $width
+	 * @param  mixed        $height
 	 */
 	public function feImage($href, $preserveAspectRatio = null,
 			$result = null, $position = null, $width = null, $height = null)
@@ -476,8 +495,6 @@ class Svg extends Xml implements XLinkConstants
 	const PRESERVE_XMAXYMIN = 'xMaxYMin';
 	const PRESERVE_XMAXYMID = 'xMaxYMid';
 	const PRESERVE_XMAXYMAX = 'xMaxYMax';
-	const PRESERVE_MEET = ' meet';
-	const PRESERVE_SLICE = ' slice';
 
 	/**
 	 * The <code>preserveAspectRatio</code> attribute.
@@ -504,7 +521,7 @@ class Svg extends Xml implements XLinkConstants
 
 	public static function buildPreserveAspectRatio($align, $slice = false, $defer = false)
 	{
-		return ($defer ? 'defer ' : '') . $align . ($slice ? self::PRESERVE_SLICE : '');
+		return ($defer ? 'defer ' : '') . $align . ($slice ? ' slice' : '');
 	}
 
 	/**
