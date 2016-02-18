@@ -31,7 +31,7 @@ foreach ([false, true] as $ccw) {
 			$svg->path()
 					->ringSectorPath($center, $start, $start + $span, 50, 40, $ccw)
 					->sectorPath($center, $start, $start + $span, 30, $ccw);
-			$svg->text($start . '+' . $span . ($ccw ? ' ccw' : ''), 10, 110);
+			$svg->text($start . '+' . $span . ($ccw ? ' ccw' : ''), [10, 110]);
 			print $svg->getMarkup();
 		}
 	}

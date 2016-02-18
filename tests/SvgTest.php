@@ -602,6 +602,11 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->inLine()->feMerge([null, 'fe2'], 'm'),
 						'<feMerge result="m"><feMergeNode/><feMergeNode in="fe2"/></feMerge>'
 				),
+				// feMorphology()
+				array(
+						Svg::createSub()->feMorphology([2, 3], Svg::OPERATOR_ERODE, 'fe1', 'fe2'),
+						'<feMorphology in="fe1" radius="2,3" operator="erode" result="fe2"/>'
+				),
 				// feOffset()
 				array(
 						Svg::createSub()->feOffset(2, 1, Svg::IN_BACKGROUND_IMAGE, 'offset'),

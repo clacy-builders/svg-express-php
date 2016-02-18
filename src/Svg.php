@@ -447,6 +447,27 @@ class Svg extends Xml implements XLinkConstants
 		return $fm;
 	}
 
+	const OPERATOR_DILATE = 'dilate';
+	const OPERATOR_ERODE = 'erode';
+
+	/**
+	 * The <code>feMorphology</code> filter primitive.
+	 *
+	 * @param  mixed       $radius    One or two values (comma separated or in an array).
+	 * @param  string      $operator  <code>Svg::OPERATOR_ERODE</code> or
+	 *                                <code>Svg::OPERATOR_DILATE</code>.
+	 * @param  string|Svg  $in        See <code>setIn()</code>.
+	 * @param  string      $result    See <code>setResult()</code>.
+	 */
+	public function feMorphology($radius = null, $operator = null, $in = null, $result = null)
+	{
+		return $this->append('feMorphology')
+				->setIn($in)
+				->complexAttrib('radius', $radius, ',')
+				->attrib('operator', $operator)
+				->setResult($result);
+	}
+
 	/**
 	 * The <code>feOffset</code> filter primitive.
 	 *
