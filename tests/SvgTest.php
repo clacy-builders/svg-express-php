@@ -526,6 +526,14 @@ class SvgTest extends Express_TestCase
 	public function filterProvider()
 	{
 		return array(
+				// filter()
+				array(
+						Svg::createSub()->filter('f2', ['-10%', '-10%'], '120%', '120%', '#f1',
+								Svg::UNITS_OBJECT_BOUNDING_BOX, Svg::UNITS_USER_SPACE_ON_USE),
+						'<filter id="f2" xlink:href="#f1"' .
+						' x="-10%" y="-10%" width="120%" height="120%"' .
+						' filterUnits="objectBoundingBox" primitiveUnits="userSpaceOnUse"/>'
+				),
 				// setIn()
 				array(
 						Svg::createSub()->feGaussianBlur(4)->setIn(Svg::IN_SOURCE_ALPHA),

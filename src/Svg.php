@@ -40,7 +40,7 @@ class Svg extends Xml implements XLinkConstants
 	public function rect($corner, $width, $height, $rx = null, $ry = null)
 	{
 		return $this->append('rect')
-				->pointAttrib($corner)
+				->setPosition($corner)
 				->setDimensions($width, $height)
 				->attrib('rx', $rx)
 				->attrib('ry', $ry);
@@ -55,7 +55,7 @@ class Svg extends Xml implements XLinkConstants
 	public function circle($center, $r)
 	{
 		return $this->append('circle')
-				->pointAttrib($center, 'cx', 'cy')
+				->setCenter($center)
 				->attrib('r', $r);
 	}
 
@@ -69,7 +69,7 @@ class Svg extends Xml implements XLinkConstants
 	public function ellipse($center, $rx, $ry)
 	{
 		return $this->append('ellipse')
-				->pointAttrib($center, 'cx', 'cy')
+				->setCenter($center)
 				->attrib('rx', $rx)
 				->attrib('ry', $ry);
 	}
@@ -164,7 +164,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		return $this->append('image')
 				->setXLinkHref($href)
-				->pointAttrib($position)
+				->setPosition($position)
 				->setDimensions($width, $height)
 				->setPreserveAspectRatio($preserveAspectRatio);
 	}
@@ -187,7 +187,7 @@ class Svg extends Xml implements XLinkConstants
 	public function text($content = '', $position = null, $dx = null, $dy = null, $rotate = null)
 	{
 		return $this->append('text', $content)
-				->pointAttrib($position)
+				->setPosition($position)
 				->setDxDy($dx, $dy)
 				->setRotate($rotate);
 	}
@@ -209,7 +209,7 @@ class Svg extends Xml implements XLinkConstants
 	public function tspan($content, $position = null, $dx = null, $dy = null, $rotate = null)
 	{
 		return $this->append('tspan', $content)
-				->pointAttrib($position)
+				->setPosition($position)
 				->setDxDy($dx, $dy)
 				->setRotate($rotate);
 	}
@@ -249,7 +249,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		return $this->append('use')
 				->setXLinkHref($href)
-				->pointAttrib($corner)
+				->setPosition($corner)
 				->setDimensions($width, $height);
 	}
 
@@ -283,10 +283,25 @@ class Svg extends Xml implements XLinkConstants
 
 	/**
 	 * The <code>filter</code> element.
+	 *
+	 * @param  string       $id
+	 * @param  Point|array  $position
+	 * @param  mixed        $width
+	 * @param  mixed        $height
+	 * @param  string       $href            Reference to another filter within the same SVG.
+	 * @param  string       $filterUnits     see <code>setFilterUnits()</code>.
+	 * @param  string       $primitiveUnits  see <code>setPrimitiveUnits()</code>.
 	 */
-	public function filter()
+	public function filter($id, $position = null, $width = null, $height = null,
+			$href = null, $filterUnits = null, $primitiveUnits = null)
 	{
-		return $this->append('filter');
+		return $this->append('filter')
+				->setId($id)
+				->setXLinkHref($href)
+				->setPosition($position)
+				->setDimensions($width, $height)
+				->setFilterUnits($filterUnits)
+				->setPrimitiveUnits($primitiveUnits);
 	}
 
 	CONST MODE_NORMAL = 'normal';
@@ -426,7 +441,7 @@ class Svg extends Xml implements XLinkConstants
 		return $this->append('feImage')
 				->setXLinkHref($href)
 				->setPreserveAspectRatio($preserveAspectRatio)
-				->pointAttrib($position)
+				->setPosition($position)
 				->setDimensions($width, $height)
 				->setResult($result);
 	}
@@ -966,6 +981,31 @@ class Svg extends Xml implements XLinkConstants
 		return $this->complexAttrib('rotate', $rotate);
 	}
 
+	const UNITS_USER_SPACE_ON_USE = 'userSpaceOnUse';
+	const UNITS_OBJECT_BOUNDING_BOX = 'objectBoundingBox';
+
+	/**
+	 * The <code>filterUnits</code> attribute.
+	 *
+	 * @param  string  $filterUnits  <code>Svg::UNITS_USER_SPACE_ON_USE</code> OR
+	 *                               <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>.
+	 */
+	public function setFilterUnits($filterUnits)
+	{
+		return $this->attrib('filterUnits', $filterUnits);
+	}
+
+	/**
+	 * The <code>primitiveUnits</code> attribute.
+	 *
+	 * @param  string  $primitiveUnits  <code>Svg::UNITS_USER_SPACE_ON_USE</code> OR
+	 *                                  <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>.
+	 */
+	public function setPrimitiveUnits($primitiveUnits)
+	{
+		return $this->attrib('primitiveUnits', $primitiveUnits);
+	}
+
 	const IN_SOURCE_GRAPHIC = 'SourceGraphic';
 	const IN_SOURCE_ALPHA = 'SourceAlpha';
 	const IN_BACKGROUND_IMAGE = 'BackgroundImage';
@@ -1012,6 +1052,26 @@ class Svg extends Xml implements XLinkConstants
 	public function setTableValues($tableValues)
 	{
 		return $this->complexAttrib('tableValues', $tableValues);
+	}
+
+	/**
+	 * Sets the <code>x</code> and <code>y</code> attributes.
+	 *
+	 * @param  Point|array  $position
+	 */
+	public function setPosition($position)
+	{
+		return $this->pointAttrib($position);
+	}
+
+	/**
+	 * Sets the <code>cx</code> and <code>cy</code> attributes.
+	 *
+	 * @param  Point|array  $center
+	 */
+	public function setCenter($center)
+	{
+		return $this->pointAttrib($center, 'cx', 'cy');
 	}
 
 	/**
