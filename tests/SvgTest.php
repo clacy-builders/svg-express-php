@@ -560,6 +560,27 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->feBlend('fe1', 'fe2', Svg::MODE_DARKEN, 'fe3'),
 						'<feBlend in="fe1" in2="fe2" mode="darken" result="fe3"/>'
 				),
+				// feColorMatrix()
+				array(
+						Svg::createSub()->feColorMatrix(Svg::TYPE_MATRIX, [
+								[1, 0,   0,   0, 0],
+								[0, 0.2, 0,   0, 0],
+								[0, 0,   0.2, 0, 0],
+								[0, 0,   0,   1, 0]], 'fe1', 'fe2'),
+						'<feColorMatrix in="fe1" type="matrix"' .
+						' values="1 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" result="fe2"/>'
+				),
+				array(
+						Svg::createSub()->feColorMatrix(Svg::TYPE_MATRIX,
+								'1 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0', 'fe1', 'fe2'),
+						'<feColorMatrix in="fe1" type="matrix"' .
+						' values="1 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" result="fe2"/>'
+				),
+				array(
+						Svg::createSub()->feColorMatrix(
+								Svg::TYPE_LUMINANCE_TO_ALPHA, null, 'fe1', 'fe2'),
+						'<feColorMatrix in="fe1" type="luminanceToAlpha" result="fe2"/>'
+				),
 				// feComponentTransfer()
 				array(
 						Svg::createSub()->feComponentTransfer('fe1', 'fe2'),

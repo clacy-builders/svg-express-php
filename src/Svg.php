@@ -332,6 +332,27 @@ class Svg extends Xml implements XLinkConstants
 				->setResult($result);
 	}
 
+	const TYPE_MATRIX = 'matrix';
+	const TYPE_SATURATE = 'saturate';
+	const TYPE_HUE_ROTATE = 'hueRotate';
+	const TYPE_LUMINANCE_TO_ALPHA = 'luminanceToAlpha';
+
+	/**
+	 *
+	 * @param  string      $type
+	 * @param  mixed       $values
+	 * @param  string|Svg  $in      See <code>setIn()</code>.
+	 * @param  string      $result  See <code>setResult()</code>.
+	 */
+	public function feColorMatrix($type, $values = null, $in = null, $result = null)
+	{
+		return $this->append('feColorMatrix')
+				->setIn($in)
+				->attrib('type', $type)
+				->matrixAttrib('values', $values)
+				->setResult($result);
+	}
+
 	/**
 	 * The <code>feComponentTransfer</code> filter primitive.
 	 *
@@ -351,12 +372,6 @@ class Svg extends Xml implements XLinkConstants
 	const CHANNEL_A = 'A';
 	const CHANNEL_RGB = 0;
 	const CHANNEL_RGBA = 1;
-
-	const TYPE_IDENTITY = 'identity';
-	const TYPE_TABLE = 'table';
-	const TYPE_DISCRETE = 'discrete';
-	const TYPE_LINEAR = 'linear';
-	const TYPE_GAMMA = 'gamma';
 
 	protected function feFunc($channel, $type, $tableValues = null,
 			$slope = null, $intercept = null, $amplitude = null, $exponent = null, $offset = null)
@@ -385,28 +400,27 @@ class Svg extends Xml implements XLinkConstants
 
 	public function feFuncIdentity($channel)
 	{
-		return $this->feFunc($channel, self::TYPE_IDENTITY);
+		return $this->feFunc($channel, 'identity');
 	}
 
 	public function feFuncTable($channel, $tableValues)
 	{
-		return $this->feFunc($channel, self::TYPE_TABLE, $tableValues);
+		return $this->feFunc($channel, 'table', $tableValues);
 	}
 
 	public function feFuncDiscrete($channel, $tableValues)
 	{
-		return $this->feFunc($channel, self::TYPE_DISCRETE, $tableValues);
+		return $this->feFunc($channel, 'discrete', $tableValues);
 	}
 
 	public function feFuncLinear($channel, $slope, $intercept = null)
 	{
-		return $this->feFunc($channel, self::TYPE_LINEAR, null, $slope, $intercept);
+		return $this->feFunc($channel, 'linear', null, $slope, $intercept);
 	}
 
 	public function feFuncGamma($channel, $amplitude = null, $exponent = null, $offset = null)
 	{
-		return $this->feFunc($channel, self::TYPE_GAMMA, null, null, null,
-				$amplitude, $exponent, $offset);
+		return $this->feFunc($channel, 'gamma', null, null, null, $amplitude, $exponent, $offset);
 	}
 
 	/**
@@ -1096,6 +1110,19 @@ class Svg extends Xml implements XLinkConstants
 			$y = $point->y;
 		}
 		return $this->attrib($xName, $x)->attrib($yName, $y);
+	}
+
+	protected function matrixAttrib($name, $matrix, $glue = ' ')
+	{
+		if (\is_array($matrix)) {
+			foreach ($matrix as $key => $value) {
+				if (\is_array($value)) {
+					$matrix[$key] = \implode($glue, $value);
+				}
+			}
+			$matrix = \implode($glue, $matrix);
+		}
+		return $this->attrib($name, $matrix);
 	}
 
 	private static function point($point)
