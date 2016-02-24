@@ -9,13 +9,16 @@ use ML_Express\Shared\AddQuery;
 use ML_Express\Shared\ClassAttribute;
 use ML_Express\Shared\DimensionAttributes;
 use ML_Express\Shared\StyleAttribute;
+use ML_Express\Shared\TypeAttribute;
+use ML_Express\Shared\XmlStylesheet;
 use ML_Express\Graphics\Point;
 use ML_Express\Graphics\Points;
 use ML_Express\Graphics\Angle;
 
 class Svg extends Xml implements XLinkConstants
 {
-	use XLink, AddQuery, DimensionAttributes, ClassAttribute, StyleAttribute;
+	use XLink, XmlStylesheet,
+			AddQuery, DimensionAttributes, ClassAttribute, StyleAttribute, TypeAttribute;
 
 	const MIME_TYPE = 'image/svg+xml';
 	const FILENAME_EXTENSION = 'svg';
@@ -348,7 +351,7 @@ class Svg extends Xml implements XLinkConstants
 	{
 		return $this->append('feColorMatrix')
 				->setIn($in)
-				->attrib('type', $type)
+				->setType($type)
 				->matrixAttrib('values', $values)
 				->setResult($result);
 	}
@@ -389,7 +392,7 @@ class Svg extends Xml implements XLinkConstants
 			return $this;
 		}
 		return $this->append('feFunc' . $channel)
-				->attrib('type', $type)
+				->setType($type)
 				->complexAttrib('tableValues', $tableValues, ',')
 				->attrib('slope', $slope)
 				->attrib('intercept', $intercept)
