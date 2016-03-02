@@ -32,13 +32,14 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The rect (rectangle) element.
+	 * Appends a rect (rectangle) element.
 	 *
 	 * @param  Point|array  $corner  The top left corner of the rectangle.
 	 * @param  float        $width   The width of the rectangle.
 	 * @param  float        $height  The height of the rectangle.
 	 * @param  float        $rx      The x radius of the corners of the rectangle.
 	 * @param  float        $ry      The y radius of the corners of the rectangle.
+	 * @return Svg
 	 */
 	public function rect($corner, $width, $height, $rx = null, $ry = null)
 	{
@@ -50,10 +51,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>circle</code> element.
+	 * Appends a <code>circle</code> element.
 	 *
 	 * @param  Point|array  $center  Center of the circle.
 	 * @param  float        $r       The radius of the circle.
+	 * @return Svg
 	 */
 	public function circle($center, $r)
 	{
@@ -63,11 +65,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>ellipse</code> element.
+	 * Appends an <code>ellipse</code> element.
 	 *
 	 * @param  Point|array  $center  The center of the ellipse.
 	 * @param  float        $rx      The x radius of the ellipse.
-	 * @param  float        $ry      The y radius of the ellipse.	 *
+	 * @param  float        $ry      The y radius of the ellipse.
+	 * @return Svg
 	 */
 	public function ellipse($center, $rx, $ry)
 	{
@@ -78,10 +81,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>line</code> element.
+	 * Appends a <code>line</code> element.
 	 *
 	 * @param  Point|array  $point1
 	 * @param  Point|array  $point2
+	 * @return Svg
 	 */
 	public function line($point1, $point2)
 	{
@@ -91,11 +95,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>polyline</code> element.
+	 * Appends a <code>polyline</code> element.
 	 *
 	 * @param  string|array  $points  A space separated list of points which x and y coordinates
 	 *                                are comma separated.
 	 *                                Otherwise an array of arrays or <code>Point</code> objects.
+	 * @return Svg
 	 */
 	public function polyline($points = null)
 	{
@@ -104,12 +109,13 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>polygon</code> element.
+	 * Appends a <code>polygon</code> element.
 	 *
 	 * @param  mixed  $points  A space separated list of points which x and y coordinates
 	 *                         are comma separated.
 	 *                         Otherwise a <code>Points</code> object, an array of arrays
 	 *                         or <code>Point</code> objects.
+	 * @return Svg
 	 */
 	public function polygon($points = null)
 	{
@@ -125,6 +131,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  int          $n       Number of corners of the underlying polygon.
 	 * @param  float        $radius  Radius of the underlying polygon.
 	 * @param  float        $radii
+	 * @return Svg
 	 */
 	public function star($center, $n, $radius, $radii = [])
 	{
@@ -133,7 +140,7 @@ class Svg extends Xml implements XLinkConstants
 
 
 	/**
-	 * The <code>path</code> element.
+	 * Appends a <code>path</code> element.
 	 *
 	 * @param  string  $d  A series of commands. You may use the following methods to build
 	 *                     this attribute:<ul><li><code>moveTo()</code>,
@@ -146,6 +153,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                     <li><code>sqCurveTo()</code>
 	 *                     <li><code>arc()</code>
 	 *                     <li><code>closePath()</code></ul>
+	 * @return Svg
 	 */
 	public function path($d = null)
 	{
@@ -154,13 +162,14 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>image</code> element.
+	 * Appends an <code>image</code> element.
 	 *
 	 * @param  string       $href
 	 * @param  Point|array  $position             The top left corner of the image.
 	 * @param  mixed        $width
 	 * @param  mixed        $height
 	 * @param  string       $preserveAspectRatio  See <code>setPreserveAspectRatio()</code>.
+	 * @return Svg
 	 */
 	public function image($href, $position = null,
 			$width = null, $height = null, $preserveAspectRatio = null)
@@ -173,7 +182,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>text</code> element.
+	 * Appends a <code>text</code> element.
 	 *
 	 * @param  string       $content   You may append <code>tspan</code> or <code>tpath</code>
 	 *                                 instead.
@@ -186,6 +195,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  mixed        $rotate    Makes each character rotate to its respective value, with
 	 *                                 remaining characters rotating according to the last value.
 	 *                                 A space separated list or an array.
+	 * @return Svg
 	 */
 	public function text($content = '', $position = null, $dx = null, $dy = null, $rotate = null)
 	{
@@ -196,7 +206,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>tspan</code> element.
+	 * Appends a <code>tspan</code> element.
 	 *
 	 * @param  string       $content
 	 * @param  Point|array  $position  The position of the first letter. Use <code>setX()</code>,
@@ -208,6 +218,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  mixed        $rotate    Makes each character rotate to its respective value, with
 	 *                                 remaining characters rotating according to the last value.
 	 *                                 A space separated list or an array.
+	 * @return Svg
 	 */
 	public function tspan($content, $position = null, $dx = null, $dy = null, $rotate = null)
 	{
@@ -218,11 +229,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>textPath</code> element.
+	 * Appends a <code>textPath</code> element.
 	 *
 	 * @param  string  $content
 	 * @param  string  $href     Fetches an arbitrary path and aligns the characters,
 	 *                           that it encircles, along this path.
+	 * @return Svg
 	 */
 	public function textPath($content, $href)
 	{
@@ -230,7 +242,9 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>defs</code> element.
+	 * Appends a <code>defs</code> element.
+	 *
+	 * @return Svg
 	 */
 	public function defs()
 	{
@@ -238,7 +252,7 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>use</code> element.
+	 * Appends an <code>use</code> element.
 	 *
 	 * @param  string       $href    A reference to an element/fragment within an SVG document.
 	 * @param  Point|array  $corner  The upper-left corner of the region into which the
@@ -247,6 +261,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                               is placed.
 	 * @param  float        $height  The height of the region into which the referenced element
 	 *                               is placed.
+	 * @return Svg
 	 */
 	public function useElem($href, $corner, $width = null, $height = null)
 	{
@@ -257,7 +272,9 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>g</code> element.
+	 * Appends a <code>g</code> element.
+	 *
+	 * @return Svg
 	 */
 	public function g()
 	{
@@ -265,9 +282,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>title</code> element.
+	 * Appends a <code>title</code> element.
 	 *
 	 * @param  string  $content
+	 * @return Svg
 	 */
 	public function title($content)
 	{
@@ -275,9 +293,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>desc</code> element.
+	 * Appends a <code>desc</code> element.
 	 *
 	 * @param  string  $content
+	 * @return Svg
 	 */
 	public function desc($content)
 	{
@@ -285,7 +304,22 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>filter</code> element.
+	 * Appends a <code>clipPath</code> element.
+	 *
+	 * @param  string  $id
+	 * @param  string  $clipPathUnits  <ul><li><code>Svg::UNITS_USER_SPACE_ON_USE</code>
+	 *                                 <li><code>Svg::UNITS_OBJECT_BOUNDING_BOX</code></ul>
+	 * @return Svg
+	 */
+	public function clipPath($id, $clipPathUnits = null)
+	{
+		return $this->append('clipPath')
+				->setId($id)
+				->attrib('clipPathUnits', $clipPathUnits);
+	}
+
+	/**
+	 * Appends a <code>filter</code> element.
 	 *
 	 * @param  string       $id
 	 * @param  Point|array  $position
@@ -294,6 +328,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  string       $href            Reference to another filter within the same SVG.
 	 * @param  string       $filterUnits     see <code>setFilterUnits()</code>.
 	 * @param  string       $primitiveUnits  see <code>setPrimitiveUnits()</code>.
+	 * @return Svg
 	 */
 	public function filter($id, $position = null, $width = null, $height = null,
 			$href = null, $filterUnits = null, $primitiveUnits = null)
@@ -325,6 +360,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                              <li><code>Svg::MODE_DARKEN</code>
 	 *                              <li><code>Svg::MODE_LIGHTEN</code></ul>
 	 * @param  string      $result  See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feBlend($in, $in2, $mode = null, $result = null)
 	{
@@ -346,6 +382,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  mixed       $values
 	 * @param  string|Svg  $in      See <code>setIn()</code>.
 	 * @param  string      $result  See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feColorMatrix($type, $values = null, $in = null, $result = null)
 	{
@@ -361,6 +398,7 @@ class Svg extends Xml implements XLinkConstants
 	 *
 	 * @param  string|Svg  $in      See <code>setIn()</code>.
 	 * @param  string      $result  See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feComponentTransfer($in = null, $result = null)
 	{
@@ -433,6 +471,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                                    for x-axis and y-axis respectively.
 	 * @param  string|Svg  $in            See <code>setIn()</code>.
 	 * @param  string      $result        See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feGaussianBlur($stdDeviation = null, $in = null, $result = null)
 	{
@@ -451,6 +490,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $position
 	 * @param  mixed        $width
 	 * @param  mixed        $height
+	 * @return Svg
 	 */
 	public function feImage($href, $preserveAspectRatio = null,
 			$result = null, $position = null, $width = null, $height = null)
@@ -469,6 +509,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  array   $in      The values for the <code>in</code> attributes of the
 	 *                          <code>feMergeNode</code> subelements.
 	 * @param  string  $result  See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feMerge($in, $result = null)
 	{
@@ -490,6 +531,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                                <code>Svg::OPERATOR_DILATE</code>.
 	 * @param  string|Svg  $in        See <code>setIn()</code>.
 	 * @param  string      $result    See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feMorphology($radius = null, $operator = null, $in = null, $result = null)
 	{
@@ -507,6 +549,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float       $dy      Shift along the y-axis.
 	 * @param  string|Svg  $in      See <code>setIn()</code>.
 	 * @param  string      $result  See <code>setResult()</code>.
+	 * @return Svg
 	 */
 	public function feOffset($dx, $dy, $in = null, $result = null)
 	{
@@ -518,9 +561,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>id</code> attribute.
+	 * Sets the <code>id</code> attribute.
 	 *
 	 * @param  string  $id
+	 * @return Svg
 	 */
 	public function setId($id)
 	{
@@ -550,7 +594,7 @@ class Svg extends Xml implements XLinkConstants
 	const PRESERVE_XMAXYMAX = 'xMaxYMax';
 
 	/**
-	 * The <code>preserveAspectRatio</code> attribute.
+	 * Sets the <code>preserveAspectRatio</code> attribute.
 	 *
 	 * @param  string   $align  One of the following values:<ul>
 	 *                          <li><code>Svg::PRESERVE_NONE</code>
@@ -565,6 +609,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                          <li><code>Svg::PRESERVE_XMAXYMAX</code></ul>
 	 * @param  boolean  $slice
 	 * @param  boolean  $defer
+	 * @return Svg
 	 */
 	public function setPreserveAspectRatio($align, $slice = false, $defer = false)
 	{
@@ -578,11 +623,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>points</code> attribute.
+	 * Sets the <code>points</code> attribute.
 	 *
 	 * @param  string|array  $points  A space separated list of points which x and y coordinates
 	 *                                are comma separated.
 	 *                                Otherwise an array of arrays or <code>Point</code> objects.
+	 * @return Svg
 	 */
 	public function setPoints($points)
 	{
@@ -596,9 +642,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * Adds a point to the points listed in The <code>points</code> attribute.
+	 * Adds a point to the points listed in the <code>points</code> attribute.
 	 *
 	 * @param  Point|array  $point
+	 * @return Svg
 	 */
 	public function addPoint($point)
 	{
@@ -615,6 +662,8 @@ class Svg extends Xml implements XLinkConstants
 
 	/**
 	 * The close path command (<code>Z</code>).
+	 *
+	 * @return Svg
 	 */
 	public function closePath()
 	{
@@ -627,6 +676,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The point to move to.
 	 * @param  booolean     $relative  Whether x, y of <code>$point</code> are relative
 	 *                                 or absolute.
+	 * @return Svg
 	 */
 	public function moveTo($point, $relative = false)
 	{
@@ -640,6 +690,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The point to end the line at.
 	 * @param  boolean      $relative  Whether x, y of <code>$point</code> are relative
 	 *                                 (to the last point) or absolute.
+	 * @return Svg
 	 */
 	public function lineTo($point, $relative = false)
 	{
@@ -653,6 +704,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float    $x         The x coordinate to end the line at.
 	 * @param  boolean  $relative  Whether <code>$x</code> is relative (to the last point)
 	 *                             or absolute.
+	 * @return Svg
 	 */
 	public function hLineTo($x, $relative = false)
 	{
@@ -665,6 +717,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float    $y         The y coordinate to end the line at.
 	 * @param  boolean  $relative  Whether <code>$y</code> is relative (to the last point)
 	 *                             or absolute.
+	 * @return Svg
 	 */
 	public function vLineTo($y, $relative = false)
 	{
@@ -679,6 +732,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The y coordinate to end the stroke at.
 	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
 	 *                                 or absolute.
+	 * @return Svg
 	 */
 	public function curveTo($control1, $control2, $point, $relative = false)
 	{
@@ -697,6 +751,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The point to end the stroke at.
 	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
 	 *                                 or absolute.
+	 * @return Svg
 	 */
 	public function sCurveTo($control2, $point, $relative = false)
 	{
@@ -713,6 +768,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The point to end the stroke at.
 	 * @param  boolean      $relative  Whether the coordinates are relative (to the last point)
 	 *                                 or absolute.
+	 * @return Svg
 	 */
 	public function qCurveTo($control, $point, $relative = false)
 	{
@@ -728,6 +784,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point     The point to end the stroke at.
 	 * @param  boolean      $relative  Whether x, y of <code>$point</code> are relative
 	 *                                 (to the last point) or absolute.
+	 * @return Svg
 	 */
 	public function sqCurveTo($point, $relative = false)
 	{
@@ -748,6 +805,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point          The point to end the stroke at.
 	 * @param  boolean      $relative       Whether x, y of <code>$point</code> are relative
 	 *                                      (to the last point) or absolute.
+	 * @return Svg
 	 */
 	public function arc($rx, $ry, $xAxisRotation, $largeArc, $sweep, $point, $relative = false)
 	{
@@ -765,6 +823,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $width
 	 * @param  float        $height
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function rectanglePath($corner, $width, $height, $ccw = false)
 	{
@@ -779,6 +838,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  int          $n       Number of corners.
 	 * @param  float        $radius
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function polygonPath($center, $n, $radius, $ccw = false)
 	{
@@ -793,6 +853,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $radius  Radius of the underlying polygon.
 	 * @param  float        $radii
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function starPath($center, $n, $radius, $radii = [], $ccw = false)
 	{
@@ -804,6 +865,7 @@ class Svg extends Xml implements XLinkConstants
 	 * Adds path commands to draw any polygon.
 	 *
 	 * @param  Points  $points
+	 * @return Svg
 	 */
 	public function anyPolygonPath(Points $points)
 	{
@@ -822,6 +884,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $center
 	 * @param  float        $radius
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function circlePath($center, $radius, $ccw = false)
 	{
@@ -836,6 +899,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $ry
 	 * @param  float        $xAxisRotation
 	 * @param  boolean      $ccw            Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function ellipsePath($center, $rx, $ry, $xAxisRotation = 0, $ccw = false)
 	{
@@ -857,6 +921,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Angle|float  $stop    Must be greater than <code>$start</code>.
 	 * @param  float        $radius
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function sectorPath($center, $start, $stop, $radius, $ccw = false)
 	{
@@ -880,6 +945,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $radius       Must be greater than <code>$start</code>.
 	 * @param  float        $innerRadius
 	 * @param  boolean      $ccw          Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function ringSectorPath($center, $start, $stop, $radius, $innerRadius, $ccw = false)
 	{
@@ -904,6 +970,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  float        $height
 	 * @param  float        $radius
 	 * @param  boolean      $ccw     Whether to draw counterclockwise or not.
+	 * @return Svg
 	 */
 	public function roundedRectanglePath($corner, $width, $height, $radius, $ccw = false)
 	{
@@ -921,10 +988,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>dx</code> attribute.
+	 * Sets the <code>dx</code> attribute.
 	 *
 	 * @param  mixed  $dx  The horizontal offset. One or more values (comma separated or
 	 *                     in an array).
+	 * @return Svg
 	 */
 	public function setDx($dx)
 	{
@@ -932,10 +1000,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>dy</code> attribute.
+	 * Sets the <code>dy</code> attribute.
 	 *
 	 * @param  mixed  $dy  The vertical offset. One or more values (comma separated or
 	 *                     in an array).
+	 * @return Svg
 	 */
 	public function setDy($dy)
 	{
@@ -949,6 +1018,7 @@ class Svg extends Xml implements XLinkConstants
 	 *                     in an array).
 	 * @param  mixed  $dy  The vertical offset. One or more values (comma separated or
 	 *                     in an array).
+	 * @return Svg
 	 */
 	public function setDxDy($dx, $dy)
 	{
@@ -956,9 +1026,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>x</code> attribute.
+	 * Sets the <code>x</code> attribute.
 	 *
 	 * @param  mixed  $x  One or more x values (comma separated or in an array).
+	 * @return Svg
 	 */
 	public function setX($x)
 	{
@@ -966,9 +1037,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>y</code> attribute.
+	 * Sets the <code>y</code> attribute.
 	 *
 	 * @param  mixed  $y  One or more y values (comma separated or in an array).
+	 * @return Svg
 	 */
 	public function setY($y)
 	{
@@ -980,6 +1052,7 @@ class Svg extends Xml implements XLinkConstants
 	 *
 	 * @param  mixed  $x  One or more x values (comma separated or in an array).
 	 * @param  mixed  $y  One or more y values (comma separated or in an array).
+	 * @return Svg
 	 */
 	public function setXY($x, $y)
 	{
@@ -987,11 +1060,12 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>rotate</code> attribute.
+	 * Sets the <code>rotate</code> attribute.
 	 *
 	 * @param  mixed  Makes each character rotate to its respective value, with remaining
 	 *                characters rotating according to the last value. A space separated
 	 *                list or an array.
+	 * @return Svg
 	 */
 	public function setRotate($rotate)
 	{
@@ -1002,10 +1076,11 @@ class Svg extends Xml implements XLinkConstants
 	const UNITS_OBJECT_BOUNDING_BOX = 'objectBoundingBox';
 
 	/**
-	 * The <code>filterUnits</code> attribute.
+	 * Sets the <code>filterUnits</code> attribute.
 	 *
-	 * @param  string  $filterUnits  <code>Svg::UNITS_USER_SPACE_ON_USE</code> OR
-	 *                               <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>.
+	 * @param  string  $primitiveUnits  <ul><li><code>Svg::UNITS_USER_SPACE_ON_USE</code>
+	 *                                  <li><code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>
+	 * @return Svg
 	 */
 	public function setFilterUnits($filterUnits)
 	{
@@ -1013,10 +1088,11 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>primitiveUnits</code> attribute.
+	 * Sets the <code>primitiveUnits</code> attribute.
 	 *
-	 * @param  string  $primitiveUnits  <code>Svg::UNITS_USER_SPACE_ON_USE</code> OR
-	 *                                  <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>.
+	 * @param  string  $primitiveUnits  <ul><li><code>Svg::UNITS_USER_SPACE_ON_USE</code>
+	 *                                  <li><code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>
+	 * @return Svg
 	 */
 	public function setPrimitiveUnits($primitiveUnits)
 	{
@@ -1031,17 +1107,18 @@ class Svg extends Xml implements XLinkConstants
 	const IN_STROKE_PAINT = 'StrokePaint';
 
 	/**
-	 * The <code>in</code> attribute.
+	 * Sets the <code>in</code> attribute.
 	 *
 	 * @param  string|Svg  $in         A reference to a filter primitive (the value of its result
 	 *                                 attribute) or one of these keywords:<ul>
-	 *                                 <li><code>IN_SOURCE_GRAPHIC</code>
-	 *                                 <li><code>IN_SOURCE_ALPHA</code>
-	 *                                 <li><code>IN_BACKGROUND_IMAGE</code>
-	 *                                 <li><code>IN_BACKGROUND_ALPHA</code>
-	 *                                 <li><code>IN_FILL_PAINT</code>
-	 *                                 <li><code>IN_STROKE_PAINT</code></ul>
+	 *                                 <li><code>Svg::IN_SOURCE_GRAPHIC</code>
+	 *                                 <li><code>Svg::IN_SOURCE_ALPHA</code>
+	 *                                 <li><code>Svg::IN_BACKGROUND_IMAGE</code>
+	 *                                 <li><code>Svg::IN_BACKGROUND_ALPHA</code>
+	 *                                 <li><code>Svg::IN_FILL_PAINT</code>
+	 *                                 <li><code>Svg::IN_STROKE_PAINT</code></ul>
 	 * @param  string      $attribute  Name of the attribute: 'in' or 'in2'.
+	 * @return Svg
 	 */
 	public function setIn($in, $attribute = 'in')
 	{
@@ -1052,9 +1129,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>result</code> attribute.
+	 * Sets the <code>result</code> attribute.
 	 *
 	 * @param  string  $result  A name for the current filter primitive, so it can be referenced.
+	 * @return Svg
 	 */
 	public function setResult($result)
 	{
@@ -1062,9 +1140,10 @@ class Svg extends Xml implements XLinkConstants
 	}
 
 	/**
-	 * The <code>tableValues</code> attribute.
+	 * Sets the <code>tableValues</code> attribute.
 	 *
 	 * @param  mixed  $tableValues
+	 * @return Svg
 	 */
 	public function setTableValues($tableValues)
 	{
@@ -1075,6 +1154,7 @@ class Svg extends Xml implements XLinkConstants
 	 * Sets the <code>x</code> and <code>y</code> attributes.
 	 *
 	 * @param  Point|array  $position
+	 * @return Svg
 	 */
 	public function setPosition($position)
 	{
@@ -1085,6 +1165,7 @@ class Svg extends Xml implements XLinkConstants
 	 * Sets the <code>cx</code> and <code>cy</code> attributes.
 	 *
 	 * @param  Point|array  $center
+	 * @return Svg
 	 */
 	public function setCenter($center)
 	{
@@ -1097,6 +1178,7 @@ class Svg extends Xml implements XLinkConstants
 	 * @param  Point|array  $point
 	 * @param  string       $xName  Name of the attribute which represents the x value.
 	 * @param  string       $yName  Name of the attribute which represents the y value.
+	 * @return Svg
 	 */
 	protected function pointAttrib($point, $xName = 'x', $yName = 'y')
 	{

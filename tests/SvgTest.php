@@ -248,7 +248,12 @@ class SvgTest extends Express_TestCase
 								Svg::PRESERVE_XMIDYMID),
 						'<image xlink:href="cat.jpg" x="80" y="20" width="320" height="200"' .
 						' preserveAspectRatio="xMidYMid"/>'
-				)
+				),
+				// clipPath()
+				array(
+						Svg::createSub()->clipPath('p1', Svg::UNITS_USER_SPACE_ON_USE),
+						'<clipPath id="p1" clipPathUnits="userSpaceOnUse"/>'
+				),
 		);
 	}
 
