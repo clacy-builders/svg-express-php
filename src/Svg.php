@@ -307,8 +307,9 @@ class Svg extends Xml implements XLinkConstants
 	 * Appends a <code>clipPath</code> element.
 	 *
 	 * @param  string  $id
-	 * @param  string  $clipPathUnits  <ul><li><code>Svg::UNITS_USER_SPACE_ON_USE</code>
-	 *                                 <li><code>Svg::UNITS_OBJECT_BOUNDING_BOX</code></ul>
+	 * @param  string  $clipPathUnits  The coordinate system for the contents of the clip path:
+	 *                                 <br><code>Svg::UNITS_USER_SPACE_ON_USE</code> or
+	 *                                 <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>
 	 * @return Svg
 	 */
 	public function clipPath($id, $clipPathUnits = null)
@@ -316,6 +317,34 @@ class Svg extends Xml implements XLinkConstants
 		return $this->append('clipPath')
 				->setId($id)
 				->attrib('clipPathUnits', $clipPathUnits);
+	}
+
+	/**
+	 * Appends a <code>mask</code> element.
+	 *
+	 * @param  string       $id
+	 * @param  Point|array  $position
+	 * @param  mixed        $width
+	 * @param  mixed        $height
+	 * @param  string       $maskUnits         The coordinate system for attributes
+	 *                                         <code>x</code>, <code>y</code>, <code>width</code>
+	 *                                         and <code>height</code>:<br>
+	 *                                         <code>Svg::UNITS_USER_SPACE_ON_USE</code> or
+	 *                                         <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>
+	 * @param  string       $maskContentUnits  The coordinate system for the contents of the mask:
+	 *                                         <br><code>Svg::UNITS_USER_SPACE_ON_USE</code> or
+	 *                                         <code>Svg::UNITS_OBJECT_BOUNDING_BOX</code>
+	 * @return Svg
+	 */
+	public function mask($id, $position = null, $width = null, $height = null,
+			$maskUnits = null, $maskContentUnits = null)
+	{
+		return $this->append('mask')
+				->setId($id)
+				->setPosition($position)
+				->setDimensions($width, $height)
+				->attrib('maskUnits', $maskUnits)
+				->attrib('maskContentUnits', $maskContentUnits);
 	}
 
 	/**

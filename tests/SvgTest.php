@@ -254,6 +254,13 @@ class SvgTest extends Express_TestCase
 						Svg::createSub()->clipPath('p1', Svg::UNITS_USER_SPACE_ON_USE),
 						'<clipPath id="p1" clipPathUnits="userSpaceOnUse"/>'
 				),
+				// mask()
+				array(
+						Svg::createSub()->mask('m1', [10, 20], 200, 120,
+								Svg::UNITS_OBJECT_BOUNDING_BOX, Svg::UNITS_USER_SPACE_ON_USE),
+						'<mask id="m1" x="10" y="20" width="200" height="120"' .
+						' maskUnits="objectBoundingBox" maskContentUnits="userSpaceOnUse"/>'
+				)
 		);
 	}
 
