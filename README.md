@@ -13,7 +13,7 @@ Add the following to your project's `composer.json` file:
 {
     "minimum-stability": "dev",
     "require": {
-        "ml-express/svg": "dev-master@dev"
+        "ml-express/svg": "0.1"
     }
 }
 ```

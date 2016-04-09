@@ -406,6 +406,7 @@ class Svg extends Xml implements XLinkConstants
 	const TYPE_LUMINANCE_TO_ALPHA = 'luminanceToAlpha';
 
 	/**
+	 * The <code>feColorMatrix</code> filter primitive.
 	 *
 	 * @param  string      $type
 	 * @param  mixed       $values

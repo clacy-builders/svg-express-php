@@ -7,8 +7,8 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.4.0",
-		"ml-express/xml": "dev-master@dev",
-		"ml-express/graphics": "dev-master"
+		"ml-express/xml": "0.1",
+		"ml-express/graphics": "0.1"
 	},
 	"autoload": {
 		"psr-4": {
