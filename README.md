@@ -13,7 +13,7 @@ Add the following to your project's `composer.json` file:
 {
     "minimum-stability": "dev",
     "require": {
-        "ml-express/svg": "0.1"
+        "clacy-builders/svg": "0.1"
     }
 }
 ```
@@ -27,7 +27,7 @@ Run `composer install` or `composer update`.
 <?php
 require_once 'vendor/autoload.php';
 
-use ML_Express\SVG\Svg;
+use ClacyBuilders\Svg\Svg;
 
 $dbRows = array(
         ['month' => '2015-01', 'clicks' => '501'],

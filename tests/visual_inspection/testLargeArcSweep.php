@@ -1,8 +1,8 @@
 <?php
 require_once '../../allIncl.php';
 
-use \ML_Express\SVG\Svg;
-use \ML_Express\Graphics\Point; ?>
+use \ClacyBuilders\Svg\Svg;
+use \ClacyBuilders\Graphics\Point; ?>
 <style>
 svg {
 	background-color: #ac8;

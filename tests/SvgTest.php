@@ -1,19 +1,19 @@
 <?php
 
-namespace ML_Express\SVG\Tests;
+namespace ClacyBuilders\Svg\Tests;
 
-require_once 'vendor/ml-express/xml/allIncl.php';
-require_once 'vendor/ml-express/xml/tests/Express_TestCase.php';
-require_once 'vendor/ml-express/graphics/allIncl.php';
+require_once 'vendor/clacy-builders/xml/allIncl.php';
+require_once 'vendor/clacy-builders/xml/tests/ClacyBuilders_TestCase.php';
+require_once 'vendor/clacy-builders/graphics/allIncl.php';
 require_once 'src/Svg.php';
 
-use ML_Express\Tests\Express_TestCase;
-use ML_Express\Graphics\Angle;
-use ML_Express\Graphics\Point;
-use ML_Express\Graphics\Points;
-use ML_Express\SVG\Svg;
+use ClacyBuilders\Tests\ClacyBuilders_TestCase;
+use ClacyBuilders\Graphics\Angle;
+use ClacyBuilders\Graphics\Point;
+use ClacyBuilders\Graphics\Points;
+use ClacyBuilders\Svg\Svg;
 
-class SvgTest extends Express_TestCase
+class SvgTest extends ClacyBuilders_TestCase
 {
 	public function provider()
 	{

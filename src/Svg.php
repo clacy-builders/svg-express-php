@@ -1,19 +1,19 @@
 <?php
 
-namespace ML_Express\SVG;
+namespace ClacyBuilders\Svg;
 
-use ML_Express\Xml;
-use ML_Express\Shared\XLink;
-use ML_Express\Shared\XLinkConstants;
-use ML_Express\Shared\AddQuery;
-use ML_Express\Shared\ClassAttribute;
-use ML_Express\Shared\DimensionAttributes;
-use ML_Express\Shared\StyleAttribute;
-use ML_Express\Shared\TypeAttribute;
-use ML_Express\Shared\XmlStylesheet;
-use ML_Express\Graphics\Point;
-use ML_Express\Graphics\Points;
-use ML_Express\Graphics\Angle;
+use ClacyBuilders\Xml;
+use ClacyBuilders\Shared\XLink;
+use ClacyBuilders\Shared\XLinkConstants;
+use ClacyBuilders\Shared\AddQuery;
+use ClacyBuilders\Shared\ClassAttribute;
+use ClacyBuilders\Shared\DimensionAttributes;
+use ClacyBuilders\Shared\StyleAttribute;
+use ClacyBuilders\Shared\TypeAttribute;
+use ClacyBuilders\Shared\XmlStylesheet;
+use ClacyBuilders\Graphics\Point;
+use ClacyBuilders\Graphics\Points;
+use ClacyBuilders\Graphics\Angle;
 
 class Svg extends Xml implements XLinkConstants
 {

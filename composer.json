@@ -1,5 +1,5 @@
 {
-	"name": "ml-express/svg",
+	"name": "clacy-builders/svg",
 	"type": "library",
 	"description": "SVG Express is a library for creating SVG documents.",
 	"keywords": ["svg", "builder", "writer"],
@@ -7,12 +7,12 @@
 	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.4.0",
-		"ml-express/xml": "0.1",
-		"ml-express/graphics": "0.1"
+		"clacy-builders/xml": "dev-master",
+		"clacy-builders/graphics": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
-			"ML_Express\\SVG\\": "src/"
+			"ClacyBuilders\\Svg\\": "src/"
 		}
 	}
 }
